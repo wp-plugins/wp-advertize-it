@@ -40,6 +40,7 @@ The following locations are currently supported:
 A widget is also available to display in a sidebar.
 
 And the following options are available:
+
 * Suppress ads on posts
 * Suppress ads on pages
 * Suppress ads on attachment pages
