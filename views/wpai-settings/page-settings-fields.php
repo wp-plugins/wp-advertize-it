@@ -348,4 +348,46 @@ elseif ('wpai_suppress-post-id' == $field['label_for']) : ?>
     <input type="text" name="wpai_settings[options][suppress-post-id]"
            id="wpai_settings[options][suppress-post-id]"
            value="<?php echo $settings['options']['suppress-post-id']; ?>" placeholder="e.g. 32,9-19,33">
+<?php
+elseif ('wpai_suppress-category' == $field['label_for']) : ?>
+    <?php $categories = get_terms('category'); ?>
+    <select style="min-width: 191px;" id="wpai_settings[options][suppress-category]" name="wpai_settings[options][suppress-category][]" size="4"
+            multiple="multiple">
+        <?php foreach ($categories as $category) { ?>
+            <option
+                value="<?php echo esc_attr($category->term_id); ?>" <?php echo(in_array($category->term_id, (array)$settings['options']['suppress-category']) ? 'selected="selected"' : ''); ?>><?php echo esc_html($category->name); ?></option>
+        <?php } ?>
+    </select>
+    <button id="clear-category" class="button-secondary" onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-category\\]')[0].selectedIndex = -1;return false;">Clear</button>
+<?php
+elseif ('wpai_suppress-tag' == $field['label_for']) : ?>
+    <?php $tags = get_terms('post_tag'); ?>
+    <select style="min-width: 191px;" id="wpai_settings[options][suppress-tag]" name="wpai_settings[options][suppress-tag][]" size="4"
+            multiple="multiple">
+        <?php foreach ($tags as $tag) { ?>
+            <option
+                value="<?php echo esc_attr($tag->term_id); ?>" <?php echo(in_array($tag->term_id, (array)$settings['options']['suppress-tag']) ? 'selected="selected"' : ''); ?>><?php echo esc_html($tag->name); ?></option>
+        <?php } ?>
+    </select>
+    <button id="clear-tag" class="button-secondary" onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-tag\\]')[0].selectedIndex = -1;return false;">Clear</button>
+<?php
+elseif ('wpai_suppress-user' == $field['label_for']) : ?>
+    <?php
+    $allUsers = get_users('orderby=post_count&order=DESC');
+    $users = array();
+    // Remove subscribers from the list as they won't write any articles
+    foreach ($allUsers as $currentUser) {
+        if (!in_array('subscriber', $currentUser->roles)) {
+            $users[] = $currentUser;
+        }
+    }
+    ?>
+    <select style="min-width: 191px;" id="wpai_settings[options][suppress-user]" name="wpai_settings[options][suppress-user][]" size="4"
+            multiple="multiple">
+        <?php foreach ($users as $user) { ?>
+            <option
+                value="<?php echo esc_attr($user->ID); ?>" <?php echo(in_array($user->ID, (array)$settings['options']['suppress-user']) ? 'selected="selected"' : ''); ?>><?php echo esc_html($user->display_name); ?></option>
+        <?php } ?>
+    </select>
+    <button id="clear-user" class="button-secondary" onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-user\\]')[0].selectedIndex = -1;return false;">Clear</button>
 <?php endif; ?>

@@ -4,7 +4,7 @@ Donate link: http://benohead.com/donate/
 Tags: ad, ad banner, ad block, ads, ads display, ads in widgets, ads on website, ads plugin, adsense, adsense plugin, advertisement, advertisements, advertiser, advertising, Goggle AdSense, google ads, google adsense, insert ads, insert ads automatically, insert Google ads, publisher, widget
 Requires at least: 3.0.1
 Tested up to: 3.9.1
-Stable tag: 0.2
+Stable tag: 0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,6 +51,9 @@ And the following options are available:
 * Suppress ads on archive pages
 * Suppress ads for logged in users
 * Suppress ads for specific posts/pages by ID
+* Suppress ads for posts/pages in a specific category
+* Suppress ads for posts/pages with a specific tag
+* Suppress ads for posts/pages by a specific author
 
 If you need more fine grain control on where and whether ads are displayed or not, this plugin also defines supports:
 
@@ -93,8 +96,11 @@ Send an email to henri.benoit@gmail.com
 
 == Changelog ==
 
-= 0.2 =
+= 0.3 =
+Suppress ads by category, tag and author
 
+= 0.2 =
+Suppress ads by post/page ID
 
 = 0.1 =
 First version.

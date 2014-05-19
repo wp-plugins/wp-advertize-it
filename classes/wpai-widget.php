@@ -25,11 +25,22 @@ class WPAI_Widget extends WP_Widget
         $options = WPAI_Settings::get_instance()->settings['options'];
 
         $suppress_post_id = WordPress_Advertize_It::get_instance()->get_suppress_post_id($options);
+        $suppress_category = WordPress_Advertize_It::get_instance()->get_suppress_category($options);
+        $suppress_tag = WordPress_Advertize_It::get_instance()->get_suppress_tag($options);
+        $suppress_user = WordPress_Advertize_It::get_instance()->get_suppress_user($options);
 
-        if (!is_feed() && in_array(get_the_ID(), $suppress_post_id)) {
-            return $content;
+        if (count($suppress_user) > 0 && in_array(get_the_author_meta('ID'), $suppress_user)) {
+            return;
         }
-
+        if (count($suppress_tag) > 0 && has_tag($suppress_tag)) {
+            return;
+        }
+        if (count($suppress_category) > 0 && has_category($suppress_category)) {
+            return;
+        }
+        if (!is_feed() && in_array(get_the_ID(), $suppress_post_id)) {
+            return;
+        }
         if (!is_feed() && strpos($content, '<!--NoAds-->') !== false) {
             return;
         }

@@ -11,7 +11,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         protected static $writeable_properties = array();
         protected $modules;
 
-        const VERSION = '0.2';
+        const VERSION = '0.3';
         const PREFIX = 'wpai_';
         const DEBUG_MODE = false;
 
@@ -276,21 +276,48 @@ if (!class_exists('WordPress_Advertize_It')) {
             die;
         }
 
-        public function get_suppress_post_id($options) {
+        public function get_suppress_post_id($options)
+        {
             $suppress_post_id = array();
 
-            foreach(explode(',', $options['suppress-post-id']) as $id) {
+            foreach (explode(',', $options['suppress-post-id']) as $id) {
                 $id2 = explode('-', $id);
                 if (count($id2) == 1) {
                     array_push($suppress_post_id, $id2[0]);
-                }
-                else {
-                    for($i=$id2[0];$i<=$id2[1];$i++) {
+                } else {
+                    for ($i = $id2[0]; $i <= $id2[1]; $i++) {
                         array_push($suppress_post_id, $i);
                     }
                 }
             }
             return $suppress_post_id;
+        }
+
+        private function to_int_array($array_in)
+        {
+            $array_out = array();
+
+            if (isset($array_in) && is_array($array_in)) {
+                foreach ($array_in as $id) {
+                    array_push($array_out, intval($id));
+                }
+            }
+            return $array_out;
+        }
+
+        public function get_suppress_category($options)
+        {
+            return $this->to_int_array($options['suppress-category']);
+        }
+
+        public function get_suppress_tag($options)
+        {
+            return $this->to_int_array($options['suppress-tag']);
+        }
+
+        public function get_suppress_user($options)
+        {
+            return $this->to_int_array($options['suppress-user']);
         }
 
         public function show_ad_in_content($content)
@@ -317,7 +344,19 @@ if (!class_exists('WordPress_Advertize_It')) {
             $options = $this->modules['WPAI_Settings']->settings['options'];
 
             $suppress_post_id = $this->get_suppress_post_id($options);
+            $suppress_category = $this->get_suppress_category($options);
+            $suppress_tag = $this->get_suppress_tag($options);
+            $suppress_user = $this->get_suppress_user($options);
 
+            if (count($suppress_user) > 0 && in_array(get_the_author_meta('ID'), $suppress_user)) {
+                return $content;
+            }
+            if (count($suppress_tag) > 0 && has_tag($suppress_tag)) {
+                return $content;
+            }
+            if (count($suppress_category) > 0 && has_category($suppress_category)) {
+                return $content;
+            }
             if (!is_feed() && in_array(get_the_ID(), $suppress_post_id)) {
                 return $content;
             }
@@ -449,7 +488,6 @@ if (!class_exists('WordPress_Advertize_It')) {
                 }
                 $content = substr_replace($content, $after_first_page_paragraph, $index, 0);
             }
-
             if (is_single()) {
                 return $post_below_title . $content . $post_below_content;
             } else if (is_home()) {
@@ -473,11 +511,22 @@ if (!class_exists('WordPress_Advertize_It')) {
             $options = $this->modules['WPAI_Settings']->settings['options'];
 
             $suppress_post_id = $this->get_suppress_post_id($options);
+            $suppress_category = $this->get_suppress_category($options);
+            $suppress_tag = $this->get_suppress_tag($options);
+            $suppress_user = $this->get_suppress_user($options);
 
-            if (!is_feed() && in_array(get_the_ID(), $suppress_post_id)) {
-                return $content;
+            if (count($suppress_user) > 0 && in_array(get_the_author_meta('ID'), $suppress_user)) {
+                $all_below_footer_block = "";
             }
-
+            if (count($suppress_tag) > 0 && has_tag($suppress_tag)) {
+                $all_below_footer_block = "";
+            }
+            if (count($suppress_category) > 0 && has_category($suppress_category)) {
+                $all_below_footer_block = "";
+            }
+            if (!is_feed() && in_array(get_the_ID(), $suppress_post_id)) {
+                $all_below_footer_block = "";
+            }
             if (!is_feed() && strpos($content, '<!--NoAds-->') !== false) {
                 $all_below_footer_block = "";
             }
@@ -533,11 +582,26 @@ if (!class_exists('WordPress_Advertize_It')) {
             $options = $this->modules['WPAI_Settings']->settings['options'];
 
             $suppress_post_id = $this->get_suppress_post_id($options);
+            $suppress_category = $this->get_suppress_category($options);
+            $suppress_tag = $this->get_suppress_tag($options);
+            $suppress_user = $this->get_suppress_user($options);
 
-            if (!is_feed() && in_array(get_the_ID(), $suppress_post_id)) {
-                return $content;
+            if (count($suppress_user) > 0 && in_array(get_the_author_meta('ID'), $suppress_user)) {
+                $post_below_comments_block = "";
+                $page_below_comments_block = "";
             }
-
+            if (count($suppress_tag) > 0 && has_tag($suppress_tag)) {
+                $post_below_comments_block = "";
+                $page_below_comments_block = "";
+            }
+            if (count($suppress_category) > 0 && has_category($suppress_category)) {
+                $post_below_comments_block = "";
+                $page_below_comments_block = "";
+            }
+            if (!is_feed() && in_array(get_the_ID(), $suppress_post_id)) {
+                $post_below_comments_block = "";
+                $page_below_comments_block = "";
+            }
             if (!is_feed() && strpos($content, '<!--NoAds-->') !== false) {
                 $post_below_comments_block = "";
                 $page_below_comments_block = "";

@@ -173,7 +173,10 @@ if (!class_exists('WPAI_Settings')) {
                 "suppress_on_front" => false,
                 "suppress_on_archive" => false,
                 "suppress_on_logged_in" => false,
-                "suppress-post-id" => ""
+                "suppress-post-id" => "",
+                "suppress-category" => array(),
+                "suppress-tag" => array(),
+                "suppress-user" => array()
             );
 
             return array(
@@ -338,6 +341,9 @@ if (!class_exists('WPAI_Settings')) {
             $this->add_settings_field_options('wpai_suppress-on-archive', 'Suppress ads on archive');
             $this->add_settings_field_options('wpai_suppress-on-logged-in', 'Suppress ads for logged in users');
             $this->add_settings_field_options('wpai_suppress-post-id', 'Suppress ads for specific post/page IDs');
+            $this->add_settings_field_options('wpai_suppress-category', 'Suppress ads for specific categories');
+            $this->add_settings_field_options('wpai_suppress-tag', 'Suppress ads for specific tags');
+            $this->add_settings_field_options('wpai_suppress-user', 'Suppress ads for specific authors');
 
             // The settings container
             register_setting('wpai_settings', 'wpai_settings', array($this, 'validate_settings'));
@@ -383,9 +389,14 @@ if (!class_exists('WPAI_Settings')) {
             }
         }
 
-        private function setting_empty_if_not_set($new_settings, $section, $id)
+        private function setting_empty_string_if_not_set($new_settings, $section, $id)
         {
             $this->setting_default_if_not_set($new_settings, $section, $id, '');
+        }
+
+        private function setting_empty_array_if_not_set($new_settings, $section, $id)
+        {
+            $this->setting_default_if_not_set($new_settings, $section, $id, array());
         }
 
         private function setting_zero_if_not_set($new_settings, $section, $id)
@@ -425,20 +436,20 @@ if (!class_exists('WPAI_Settings')) {
                 $new_settings['placements'] = array();
             }
 
-            $this->setting_empty_if_not_set($new_settings, 'placements', 'homepage-below-title');
-            $this->setting_empty_if_not_set($new_settings, 'placements', 'post-below-title');
-            $this->setting_empty_if_not_set($new_settings, 'placements', 'post-below-content');
-            $this->setting_empty_if_not_set($new_settings, 'placements', 'post-below-comments');
-            $this->setting_empty_if_not_set($new_settings, 'placements', 'page-below-title');
-            $this->setting_empty_if_not_set($new_settings, 'placements', 'page-below-content');
-            $this->setting_empty_if_not_set($new_settings, 'placements', 'page-below-comments');
-            $this->setting_empty_if_not_set($new_settings, 'placements', 'all-below-footer');
-            $this->setting_empty_if_not_set($new_settings, 'placements', 'middle-of-post');
-            $this->setting_empty_if_not_set($new_settings, 'placements', 'middle-of-page');
-            $this->setting_empty_if_not_set($new_settings, 'placements', 'before-last-post-paragraph');
-            $this->setting_empty_if_not_set($new_settings, 'placements', 'before-last-page-paragraph');
-            $this->setting_empty_if_not_set($new_settings, 'placements', 'after-first-post-paragraph');
-            $this->setting_empty_if_not_set($new_settings, 'placements', 'after-first-page-paragraph');
+            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'homepage-below-title');
+            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'post-below-title');
+            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'post-below-content');
+            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'post-below-comments');
+            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'page-below-title');
+            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'page-below-content');
+            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'page-below-comments');
+            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'all-below-footer');
+            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'middle-of-post');
+            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'middle-of-page');
+            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'before-last-post-paragraph');
+            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'before-last-page-paragraph');
+            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'after-first-post-paragraph');
+            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'after-first-page-paragraph');
 
             /*
              * Options Settings
@@ -457,7 +468,10 @@ if (!class_exists('WPAI_Settings')) {
             $this->setting_zero_if_not_set($new_settings, 'options', 'suppress-on-front');
             $this->setting_zero_if_not_set($new_settings, 'options', 'suppress-on-archive');
             $this->setting_zero_if_not_set($new_settings, 'options', 'suppress-on-logged-in');
-            $this->setting_empty_if_not_set($new_settings, 'options', 'suppress-post-id');
+            $this->setting_empty_string_if_not_set($new_settings, 'options', 'suppress-post-id');
+            $this->setting_empty_array_if_not_set($new_settings, 'options', 'suppress-category');
+            $this->setting_empty_array_if_not_set($new_settings, 'options', 'suppress-tag');
+            $this->setting_empty_array_if_not_set($new_settings, 'options', 'suppress-user');
 
             return $new_settings;
         }
