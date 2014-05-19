@@ -4,7 +4,7 @@ Donate link: http://benohead.com/donate/
 Tags: ad, ad banner, ad block, ads, ads display, ads in widgets, ads on website, ads plugin, adsense, adsense plugin, advertisement, advertisements, advertiser, advertising, Goggle AdSense, google ads, google adsense, insert ads, insert ads automatically, insert Google ads, publisher, widget
 Requires at least: 3.0.1
 Tested up to: 3.9.1
-Stable tag: 0.1
+Stable tag: 0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,21 +47,23 @@ And the following options are available:
 * Suppress ads on front page
 * Suppress ads on archive pages
 * Suppress ads for logged in users
+* Suppress ads for specific posts/pages by ID
 
 If you need more fine grain control on where and whether ads are displayed or not, this plugin also defines supports:
+
 * Inserting an ad block calling a PHP function
 * Inserting an ad block using a short code
 * Inserting an ad block in the visual editor using a button
 * Adding a comment in the text editor to:
- * suppress all ads when displaying this post (except in a list of posts)
- * suppress the ad below the post or page title
- * suppress the ad after the first paragraph
- * suppress the ad in the middle of the post or page
- * suppress the ad before the last paragraph
- * suppress the ad below the post or page content
- * suppress the ad below the comments
- * suppress the ad widget
- * suppress the footer
+    * suppress all ads when displaying this post (except in a list of posts)
+    * suppress the ad below the post or page title
+    * suppress the ad after the first paragraph
+    * suppress the ad in the middle of the post or page
+    * suppress the ad before the last paragraph
+    * suppress the ad below the post or page content
+    * suppress the ad below the comments
+    * suppress the ad widget
+    * suppress the footer
 
 == Installation ==
 
@@ -87,6 +89,9 @@ Send an email to henri.benoit@gmail.com
 5. Widget configuration
 
 == Changelog ==
+
+= 0.2 =
+
 
 = 0.1 =
 First version.

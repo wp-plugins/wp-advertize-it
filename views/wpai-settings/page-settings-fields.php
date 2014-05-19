@@ -343,4 +343,9 @@ elseif ('wpai_suppress-on-logged-in' == $field['label_for']) : ?>
     <input type="checkbox" name="wpai_settings[options][suppress-on-logged-in]"
            id="wpai_settings[options][suppress-on-logged-in]"
            value="1" <?php checked(1, $settings['options']['suppress-on-logged-in']) ?>>
+<?php
+elseif ('wpai_suppress-post-id' == $field['label_for']) : ?>
+    <input type="text" name="wpai_settings[options][suppress-post-id]"
+           id="wpai_settings[options][suppress-post-id]"
+           value="<?php echo $settings['options']['suppress-post-id']; ?>" placeholder="e.g. 32,9-19,33">
 <?php endif; ?>

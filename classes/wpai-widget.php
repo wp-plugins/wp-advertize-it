@@ -24,6 +24,12 @@ class WPAI_Widget extends WP_Widget
 
         $options = WPAI_Settings::get_instance()->settings['options'];
 
+        $suppress_post_id = WordPress_Advertize_It::get_instance()->get_suppress_post_id($options);
+
+        if (!is_feed() && in_array(get_the_ID(), $suppress_post_id)) {
+            return $content;
+        }
+
         if (!is_feed() && strpos($content, '<!--NoAds-->') !== false) {
             return;
         }

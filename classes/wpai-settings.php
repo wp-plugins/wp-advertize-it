@@ -172,7 +172,8 @@ if (!class_exists('WPAI_Settings')) {
                 "suppress_on_home" => false,
                 "suppress_on_front" => false,
                 "suppress_on_archive" => false,
-                "suppress_on_logged_in" => false
+                "suppress_on_logged_in" => false,
+                "suppress-post-id" => ""
             );
 
             return array(
@@ -336,6 +337,7 @@ if (!class_exists('WPAI_Settings')) {
             $this->add_settings_field_options('wpai_suppress-on-front', 'Suppress ads on front page');
             $this->add_settings_field_options('wpai_suppress-on-archive', 'Suppress ads on archive');
             $this->add_settings_field_options('wpai_suppress-on-logged-in', 'Suppress ads for logged in users');
+            $this->add_settings_field_options('wpai_suppress-post-id', 'Suppress ads for specific post/page IDs');
 
             // The settings container
             register_setting('wpai_settings', 'wpai_settings', array($this, 'validate_settings'));
@@ -455,6 +457,7 @@ if (!class_exists('WPAI_Settings')) {
             $this->setting_zero_if_not_set($new_settings, 'options', 'suppress-on-front');
             $this->setting_zero_if_not_set($new_settings, 'options', 'suppress-on-archive');
             $this->setting_zero_if_not_set($new_settings, 'options', 'suppress-on-logged-in');
+            $this->setting_empty_if_not_set($new_settings, 'options', 'suppress-post-id');
 
             return $new_settings;
         }

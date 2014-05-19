@@ -11,7 +11,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         protected static $writeable_properties = array();
         protected $modules;
 
-        const VERSION = '0.1';
+        const VERSION = '0.2';
         const PREFIX = 'wpai_';
         const DEBUG_MODE = false;
 
@@ -276,6 +276,23 @@ if (!class_exists('WordPress_Advertize_It')) {
             die;
         }
 
+        public function get_suppress_post_id($options) {
+            $suppress_post_id = array();
+
+            foreach(explode(',', $options['suppress-post-id']) as $id) {
+                $id2 = explode('-', $id);
+                if (count($id2) == 1) {
+                    array_push($suppress_post_id, $id2[0]);
+                }
+                else {
+                    for($i=$id2[0];$i<=$id2[1];$i++) {
+                        array_push($suppress_post_id, $i);
+                    }
+                }
+            }
+            return $suppress_post_id;
+        }
+
         public function show_ad_in_content($content)
         {
             $homepage_below_title = "";
@@ -299,6 +316,11 @@ if (!class_exists('WordPress_Advertize_It')) {
 
             $options = $this->modules['WPAI_Settings']->settings['options'];
 
+            $suppress_post_id = $this->get_suppress_post_id($options);
+
+            if (!is_feed() && in_array(get_the_ID(), $suppress_post_id)) {
+                return $content;
+            }
             if (!is_feed() && strpos($content, '<!--NoAds-->') !== false) {
                 return $content;
             }
@@ -450,6 +472,12 @@ if (!class_exists('WordPress_Advertize_It')) {
 
             $options = $this->modules['WPAI_Settings']->settings['options'];
 
+            $suppress_post_id = $this->get_suppress_post_id($options);
+
+            if (!is_feed() && in_array(get_the_ID(), $suppress_post_id)) {
+                return $content;
+            }
+
             if (!is_feed() && strpos($content, '<!--NoAds-->') !== false) {
                 $all_below_footer_block = "";
             }
@@ -503,6 +531,12 @@ if (!class_exists('WordPress_Advertize_It')) {
             $content = get_the_content();
 
             $options = $this->modules['WPAI_Settings']->settings['options'];
+
+            $suppress_post_id = $this->get_suppress_post_id($options);
+
+            if (!is_feed() && in_array(get_the_ID(), $suppress_post_id)) {
+                return $content;
+            }
 
             if (!is_feed() && strpos($content, '<!--NoAds-->') !== false) {
                 $post_below_comments_block = "";
