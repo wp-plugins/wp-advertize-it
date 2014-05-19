@@ -15,11 +15,13 @@ Easily insert as many ads as you want anywhere on your website: in posts, pages 
 This plugin provides allows you to easily insert ads anywhere on your website. You can define ad blocks containing ads from Google Adsense, Amazon, Commissure Junction...
 
 Enabling advertizing on your website is as easy as:
+
 * Defining a few ad blocks copy&pasting code from Google, Amazon, CJ...
 * Selecting for each of the predefined positions which ad block should be shown.
 * Setting options where ads should be suppressed.
 
 The following locations are currently supported:
+
 * Home page below title	
 * Posts below title	
 * After first post paragraph	
