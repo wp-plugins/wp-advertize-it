@@ -351,25 +351,33 @@ elseif ('wpai_suppress-post-id' == $field['label_for']) : ?>
 <?php
 elseif ('wpai_suppress-category' == $field['label_for']) : ?>
     <?php $categories = get_terms('category'); ?>
-    <select style="min-width: 191px;" id="wpai_settings[options][suppress-category]" name="wpai_settings[options][suppress-category][]" size="4"
+    <select style="min-width: 190px;" id="wpai_settings[options][suppress-category]"
+            name="wpai_settings[options][suppress-category][]" size="4"
             multiple="multiple">
         <?php foreach ($categories as $category) { ?>
             <option
                 value="<?php echo esc_attr($category->term_id); ?>" <?php echo(in_array($category->term_id, (array)$settings['options']['suppress-category']) ? 'selected="selected"' : ''); ?>><?php echo esc_html($category->name); ?></option>
         <?php } ?>
     </select>
-    <button id="clear-category" class="button-secondary" onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-category\\]')[0].selectedIndex = -1;return false;">Clear</button>
+    <button id="clear-category" class="button-secondary"
+            onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-category\\]')[0].selectedIndex = -1;return false;">
+        Clear
+    </button>
 <?php
 elseif ('wpai_suppress-tag' == $field['label_for']) : ?>
     <?php $tags = get_terms('post_tag'); ?>
-    <select style="min-width: 191px;" id="wpai_settings[options][suppress-tag]" name="wpai_settings[options][suppress-tag][]" size="4"
+    <select style="min-width: 190px;" id="wpai_settings[options][suppress-tag]"
+            name="wpai_settings[options][suppress-tag][]" size="4"
             multiple="multiple">
         <?php foreach ($tags as $tag) { ?>
             <option
                 value="<?php echo esc_attr($tag->term_id); ?>" <?php echo(in_array($tag->term_id, (array)$settings['options']['suppress-tag']) ? 'selected="selected"' : ''); ?>><?php echo esc_html($tag->name); ?></option>
         <?php } ?>
     </select>
-    <button id="clear-tag" class="button-secondary" onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-tag\\]')[0].selectedIndex = -1;return false;">Clear</button>
+    <button id="clear-tag" class="button-secondary"
+            onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-tag\\]')[0].selectedIndex = -1;return false;">
+        Clear
+    </button>
 <?php
 elseif ('wpai_suppress-user' == $field['label_for']) : ?>
     <?php
@@ -382,12 +390,80 @@ elseif ('wpai_suppress-user' == $field['label_for']) : ?>
         }
     }
     ?>
-    <select style="min-width: 191px;" id="wpai_settings[options][suppress-user]" name="wpai_settings[options][suppress-user][]" size="4"
+    <select style="min-width: 190px;" id="wpai_settings[options][suppress-user]"
+            name="wpai_settings[options][suppress-user][]" size="4"
             multiple="multiple">
         <?php foreach ($users as $user) { ?>
             <option
                 value="<?php echo esc_attr($user->ID); ?>" <?php echo(in_array($user->ID, (array)$settings['options']['suppress-user']) ? 'selected="selected"' : ''); ?>><?php echo esc_html($user->display_name); ?></option>
         <?php } ?>
     </select>
-    <button id="clear-user" class="button-secondary" onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-user\\]')[0].selectedIndex = -1;return false;">Clear</button>
+    <button id="clear-user" class="button-secondary"
+            onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-user\\]')[0].selectedIndex = -1;return false;">
+        Clear
+    </button>
+<?php
+elseif ('wpai_suppress-format' == $field['label_for']) : ?>
+    <?php $formats = get_theme_support('post-formats'); ?>
+    <select style="min-width: 190px;" id="wpai_settings[options][suppress-format]"
+            name="wpai_settings[options][suppress-format][]" size="4"
+            multiple="multiple">
+        <?php
+        if (is_array($formats) && count($formats) > 0) {
+            ?>
+            <option
+                value="0" <?php echo(in_array('0', (array)$settings['options']['suppress-format']) ? 'selected="selected"' : ''); ?>><?php echo get_post_format_string('standard'); ?></option>
+            <?php
+            foreach ($formats[0] as $format_name) {
+                ?>
+                <option
+                    value="<?php echo esc_attr($format_name); ?>" <?php echo(in_array($format_name, (array)$settings['options']['suppress-format']) ? 'selected="selected"' : ''); ?>><?php echo esc_html(get_post_format_string($format_name)); ?></option>
+            <?php
+            }
+        }
+        ?>
+    </select>
+    <button id="clear-format" class="button-secondary"
+            onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-format\\]')[0].selectedIndex = -1;return false;">
+        Clear
+    </button>
+<?php
+elseif ('wpai_suppress-post-type' == $field['label_for']) : ?>
+    <?php $post_types = get_post_types(); ?>
+    <select style="min-width: 190px;" id="wpai_settings[options][suppress-post-type]"
+            name="wpai_settings[options][suppress-post-type][]" size="4"
+            multiple="multiple">
+        <?php
+        foreach ($post_types as $post_type_name) {
+            ?>
+            <option
+                value="<?php echo esc_attr($post_type_name); ?>" <?php echo(in_array($post_type_name, (array)$settings['options']['suppress-post-type']) ? 'selected="selected"' : ''); ?>><?php echo esc_html(get_post_type_object($post_type_name)->labels->name); ?></option>
+        <?php
+        }
+        ?>
+    </select>
+    <button id="clear-post-type" class="button-secondary"
+            onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-post-type\\]')[0].selectedIndex = -1;return false;">
+        Clear
+    </button>
+<?php
+elseif ('wpai_min-char-count' == $field['label_for']) : ?>
+    <input type="text" name="wpai_settings[options][min-char-count]"
+           id="wpai_settings[options][min-char-count]"
+           value="<?php echo $settings['options']['min-char-count']; ?>">
+<?php
+elseif ('wpai_min-word-count' == $field['label_for']) : ?>
+    <input type="text" name="wpai_settings[options][min-word-count]"
+           id="wpai_settings[options][min-word-count]"
+           value="<?php echo $settings['options']['min-word-count']; ?>">
+<?php
+elseif ('wpai_min-paragraph-count' == $field['label_for']) : ?>
+    <input type="text" name="wpai_settings[options][min-paragraph-count]"
+           id="wpai_settings[options][min-paragraph-count]"
+           value="<?php echo $settings['options']['min-paragraph-count']; ?>">
+<?php
+elseif ('wpai_suppress-url' == $field['label_for']) : ?>
+    <input type="text" name="wpai_settings[options][suppress-url]"
+           id="wpai_settings[options][suppress-url]"
+           value="<?php echo $settings['options']['suppress-url']; ?>">
 <?php endif; ?>

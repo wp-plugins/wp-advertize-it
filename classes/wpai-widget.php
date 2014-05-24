@@ -24,55 +24,7 @@ class WPAI_Widget extends WP_Widget
 
         $options = WPAI_Settings::get_instance()->settings['options'];
 
-        $suppress_post_id = WordPress_Advertize_It::get_instance()->get_suppress_post_id($options);
-        $suppress_category = WordPress_Advertize_It::get_instance()->get_suppress_category($options);
-        $suppress_tag = WordPress_Advertize_It::get_instance()->get_suppress_tag($options);
-        $suppress_user = WordPress_Advertize_It::get_instance()->get_suppress_user($options);
-
-        if (count($suppress_user) > 0 && in_array(get_the_author_meta('ID'), $suppress_user)) {
-            return;
-        }
-        if (count($suppress_tag) > 0 && has_tag($suppress_tag)) {
-            return;
-        }
-        if (count($suppress_category) > 0 && has_category($suppress_category)) {
-            return;
-        }
-        if (!is_feed() && in_array(get_the_ID(), $suppress_post_id)) {
-            return;
-        }
-        if (!is_feed() && strpos($content, '<!--NoAds-->') !== false) {
-            return;
-        }
-        if (!is_feed() && strpos($content, '<!--NoWidgetAds-->') !== false) {
-            return;
-        }
-
-        if (is_single() && $options['suppress-on-posts'] == 1) {
-            return;
-        }
-        if (is_page() && $options['suppress-on-pages'] == 1) {
-            return;
-        }
-        if (is_attachment() && $options['suppress-on-attachment'] == 1) {
-            return;
-        }
-        if (is_category() && $options['suppress-on-category'] == 1) {
-            return;
-        }
-        if (is_tag() && $options['suppress-on-tag'] == 1) {
-            return;
-        }
-        if (is_home() && $options['suppress-on-home'] == 1) {
-            return;
-        }
-        if (is_front_page() && $options['suppress-on-front'] == 1) {
-            return;
-        }
-        if (is_archive() && $options['suppress-on-archive'] == 1) {
-            return;
-        }
-        if (is_user_logged_in() && $options['suppress-on-logged-in'] == 1) {
+        if (WordPress_Advertize_It::get_instance()->is_suppress_specific($options, $content)) {
             return;
         }
 

@@ -176,7 +176,13 @@ if (!class_exists('WPAI_Settings')) {
                 "suppress-post-id" => "",
                 "suppress-category" => array(),
                 "suppress-tag" => array(),
-                "suppress-user" => array()
+                "suppress-user" => array(),
+                "suppress-format" => array(),
+                "suppress-post-type" => array(),
+                "suppress-url" => "",
+                "min-char-count" => 0,
+                "min-word-count" => 0,
+                "min-paragraph-count" => 0
             );
 
             return array(
@@ -344,6 +350,14 @@ if (!class_exists('WPAI_Settings')) {
             $this->add_settings_field_options('wpai_suppress-category', 'Suppress ads for specific categories');
             $this->add_settings_field_options('wpai_suppress-tag', 'Suppress ads for specific tags');
             $this->add_settings_field_options('wpai_suppress-user', 'Suppress ads for specific authors');
+            if (current_theme_supports('post-formats')) {
+                $this->add_settings_field_options('wpai_suppress-format', 'Suppress ads for specific post formats');
+            }
+            $this->add_settings_field_options('wpai_suppress-post-type', 'Suppress ads for specific post types');
+            $this->add_settings_field_options('wpai_suppress-url', 'Suppress ads for specific URL paths');
+            $this->add_settings_field_options('wpai_min-char-count', 'Min. character count for inline ads');
+            $this->add_settings_field_options('wpai_min-word-count', 'Min. word count for inline ads');
+            $this->add_settings_field_options('wpai_min-paragraph-count', 'Min. paragraph count for inline ads');
 
             // The settings container
             register_setting('wpai_settings', 'wpai_settings', array($this, 'validate_settings'));
@@ -472,6 +486,12 @@ if (!class_exists('WPAI_Settings')) {
             $this->setting_empty_array_if_not_set($new_settings, 'options', 'suppress-category');
             $this->setting_empty_array_if_not_set($new_settings, 'options', 'suppress-tag');
             $this->setting_empty_array_if_not_set($new_settings, 'options', 'suppress-user');
+            $this->setting_empty_array_if_not_set($new_settings, 'options', 'suppress-format');
+            $this->setting_empty_array_if_not_set($new_settings, 'options', 'suppress-post-type');
+            $this->setting_empty_string_if_not_set($new_settings, 'options', 'suppress-url');
+            $this->setting_zero_if_not_set($new_settings, 'options', 'min-char-count');
+            $this->setting_zero_if_not_set($new_settings, 'options', 'min-word-count');
+            $this->setting_zero_if_not_set($new_settings, 'options', 'min-paragraph-count');
 
             return $new_settings;
         }

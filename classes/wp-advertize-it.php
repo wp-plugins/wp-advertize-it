@@ -11,7 +11,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         protected static $writeable_properties = array();
         protected $modules;
 
-        const VERSION = '0.3';
+        const VERSION = '0.4';
         const PREFIX = 'wpai_';
         const DEBUG_MODE = false;
 
@@ -293,6 +293,16 @@ if (!class_exists('WordPress_Advertize_It')) {
             return $suppress_post_id;
         }
 
+        public function get_suppress_url($options)
+        {
+            $suppress_url = array();
+
+            foreach (explode(',', $options['suppress-url']) as $id) {
+                array_push($suppress_url, $id);
+            }
+            return $suppress_url;
+        }
+
         private function to_int_array($array_in)
         {
             $array_out = array();
@@ -320,6 +330,72 @@ if (!class_exists('WordPress_Advertize_It')) {
             return $this->to_int_array($options['suppress-user']);
         }
 
+        public function get_suppress_format($options)
+        {
+            return $options['suppress-format'];
+        }
+
+        public function get_suppress_post_type($options)
+        {
+            return $options['suppress-post-type'];
+        }
+
+        public function in_array_substr($needle, $haystack)
+        {
+            foreach ($haystack as $hay_item) {
+                if (strpos($needle, $hay_item)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public function is_suppress_specific($options, $content)
+        {
+            $suppress_post_id = $this->get_suppress_post_id($options);
+            $suppress_category = $this->get_suppress_category($options);
+            $suppress_tag = $this->get_suppress_tag($options);
+            $suppress_user = $this->get_suppress_user($options);
+            $suppress_format = $this->get_suppress_format($options);
+            $suppress_post_type = $this->get_suppress_post_type($options);
+            $suppress_url = $this->get_suppress_url($options);
+
+            return ((count($suppress_format) > 0 && in_array(get_post_format(), $suppress_format))
+                || (count($suppress_user) > 0 && in_array(get_the_author_meta('ID'), $suppress_user))
+                || (count($suppress_tag) > 0 && has_tag($suppress_tag))
+                || (count($suppress_category) > 0 && has_category($suppress_category))
+                || (count($suppress_post_type) > 0 && in_array(get_post_type(get_the_ID()), $suppress_post_type))
+                || (count($suppress_url) > 0 && $this->in_array_substr(get_the_permalink(), $suppress_url))
+                || (!is_feed() && in_array(get_the_ID(), $suppress_post_id))
+                || (!is_feed() && strpos($content, '<!--NoAds-->') !== false)
+                || (!is_feed() && strpos($content, '<!--NoWidgetAds-->') !== false)
+                || (is_single() && $options['suppress-on-posts'] == 1)
+                || (is_page() && $options['suppress-on-pages'] == 1)
+                || (is_attachment() && $options['suppress-on-attachment'] == 1)
+                || (is_category() && $options['suppress-on-category'] == 1)
+                || (is_tag() && $options['suppress-on-tag'] == 1)
+                || (is_home() && $options['suppress-on-home'] == 1)
+                || (is_front_page() && $options['suppress-on-front'] == 1)
+                || (is_archive() && $options['suppress-on-archive'] == 1)
+                || (is_user_logged_in() && $options['suppress-on-logged-in'] == 1)
+            );
+        }
+
+        public function get_paragraph_count($content)
+        {
+            return substr_count($content, '</p>');
+        }
+
+        public function get_word_count($content)
+        {
+            return str_word_count(strip_tags($content));
+        }
+
+        public function get_character_count($content)
+        {
+            return strlen(strip_tags($content));
+        }
+
         public function show_ad_in_content($content)
         {
             $homepage_below_title = "";
@@ -327,6 +403,11 @@ if (!class_exists('WordPress_Advertize_It')) {
             $post_below_content = "";
             $page_below_title = "";
             $page_below_content = "";
+
+            $content = str_replace('</P>', '</p>', $content);
+            $char_count = $this->get_character_count($content);
+            $word_count = $this->get_word_count($content);
+            $paragraph_count = $this->get_paragraph_count($content);
 
             $blocks = $this->modules['WPAI_Settings']->settings['blocks'];
             $homepage_below_title_block = $this->modules['WPAI_Settings']->settings['placements']['homepage-below-title'];
@@ -343,51 +424,7 @@ if (!class_exists('WordPress_Advertize_It')) {
 
             $options = $this->modules['WPAI_Settings']->settings['options'];
 
-            $suppress_post_id = $this->get_suppress_post_id($options);
-            $suppress_category = $this->get_suppress_category($options);
-            $suppress_tag = $this->get_suppress_tag($options);
-            $suppress_user = $this->get_suppress_user($options);
-
-            if (count($suppress_user) > 0 && in_array(get_the_author_meta('ID'), $suppress_user)) {
-                return $content;
-            }
-            if (count($suppress_tag) > 0 && has_tag($suppress_tag)) {
-                return $content;
-            }
-            if (count($suppress_category) > 0 && has_category($suppress_category)) {
-                return $content;
-            }
-            if (!is_feed() && in_array(get_the_ID(), $suppress_post_id)) {
-                return $content;
-            }
-            if (!is_feed() && strpos($content, '<!--NoAds-->') !== false) {
-                return $content;
-            }
-            if (is_single() && $options['suppress-on-posts'] == 1) {
-                return $content;
-            }
-            if (is_page() && $options['suppress-on-pages'] == 1) {
-                return $content;
-            }
-            if (is_attachment() && $options['suppress-on-attachment'] == 1) {
-                return $content;
-            }
-            if (is_category() && $options['suppress-on-category'] == 1) {
-                return $content;
-            }
-            if (is_tag() && $options['suppress-on-tag'] == 1) {
-                return $content;
-            }
-            if (is_home() && $options['suppress-on-home'] == 1) {
-                return $content;
-            }
-            if (is_front_page() && $options['suppress-on-front'] == 1) {
-                return $content;
-            }
-            if (is_archive() && $options['suppress-on-archive'] == 1) {
-                return $content;
-            }
-            if (is_user_logged_in() && $options['suppress-on-logged-in'] == 1) {
+            if ($this->is_suppress_specific($options, $content)) {
                 return $content;
             }
             if (!is_feed() && strpos($content, '<!--NoHomePageAds-->') !== false) {
@@ -431,20 +468,26 @@ if (!class_exists('WordPress_Advertize_It')) {
             if ($page_below_content_block != "") {
                 $page_below_content = WPAI_Settings::get_ad_block($blocks, $page_below_content_block);
             }
-            if (is_single() && $middle_of_post_block != "") {
+            if (is_single()
+                && $middle_of_post_block != ""
+                && intval($options['min-char-count']) <= $char_count
+                && intval($options['min-word-count']) <= $word_count
+                && intval($options['min-paragraph-count']) <= $paragraph_count
+            ) {
                 $middle_of_post = WPAI_Settings::get_ad_block($blocks, $middle_of_post_block);
-                $content = str_replace('</P>', '</p>', $content);
-                $paragraph_count = substr_count($content, '</p>');
                 $middle_paragraph = (int)($paragraph_count / 2);
                 $index = 0;
                 for ($i = 0; $i < $middle_paragraph; $i++) {
                     $index = strpos($content, '</p>', $index) + 4;
                 }
                 $content = substr_replace($content, $middle_of_post, $index, 0);
-            } else if (is_page() && $middle_of_page_block != "") {
+            } else if (is_page()
+                && $middle_of_page_block != ""
+                && intval($options['min-char-count']) <= $char_count
+                && intval($options['min-word-count']) <= $word_count
+                && intval($options['min-paragraph-count']) <= $paragraph_count
+            ) {
                 $middle_of_page = WPAI_Settings::get_ad_block($blocks, $middle_of_page_block);
-                $content = str_replace('</P>', '</p>', $content);
-                $paragraph_count = substr_count($content, '</p>');
                 $middle_paragraph = (int)($paragraph_count / 2);
                 $index = 0;
                 for ($i = 0; $i < $middle_paragraph; $i++) {
@@ -452,36 +495,50 @@ if (!class_exists('WordPress_Advertize_It')) {
                 }
                 $content = substr_replace($content, $middle_of_page, $index, 0);
             }
-            if (is_single() && $before_last_post_paragraph_block != "") {
+            if (is_single()
+                && $before_last_post_paragraph_block != ""
+                && intval($options['min-char-count']) <= $char_count
+                && intval($options['min-word-count']) <= $word_count
+                && intval($options['min-paragraph-count']) <= $paragraph_count
+            ) {
                 $before_last_post_paragraph = WPAI_Settings::get_ad_block($blocks, $before_last_post_paragraph_block);
-                $content = str_replace('</P>', '</p>', $content);
-                $paragraph_count = substr_count($content, '</p>');
                 $index = 0;
                 for ($i = 0; $i < $paragraph_count - 1; $i++) {
                     $index = strpos($content, '</p>', $index) + 4;
                 }
                 $content = substr_replace($content, $before_last_post_paragraph, $index, 0);
-            } else if (is_page() && $before_last_page_paragraph_block != "") {
+            } else if (is_page()
+                && $before_last_page_paragraph_block != ""
+                && intval($options['min-char-count']) <= $char_count
+                && intval($options['min-word-count']) <= $word_count
+                && intval($options['min-paragraph-count']) <= $paragraph_count
+            ) {
                 $before_last_page_paragraph = WPAI_Settings::get_ad_block($blocks, $before_last_page_paragraph_block);
-                $content = str_replace('</P>', '</p>', $content);
-                $paragraph_count = substr_count($content, '</p>');
                 $index = 0;
                 for ($i = 0; $i < $paragraph_count - 1; $i++) {
                     $index = strpos($content, '</p>', $index) + 4;
                 }
                 $content = substr_replace($content, $before_last_page_paragraph, $index, 0);
             }
-            if (is_single() && $after_first_post_paragraph_block != "") {
+            if (is_single()
+                && $after_first_post_paragraph_block != ""
+                && intval($options['min-char-count']) <= $char_count
+                && intval($options['min-word-count']) <= $word_count
+                && intval($options['min-paragraph-count']) <= $paragraph_count
+            ) {
                 $after_first_post_paragraph = WPAI_Settings::get_ad_block($blocks, $after_first_post_paragraph_block);
-                $content = str_replace('</P>', '</p>', $content);
                 $index = 0;
                 for ($i = 0; $i < 1; $i++) {
                     $index = strpos($content, '</p>', $index) + 4;
                 }
                 $content = substr_replace($content, $after_first_post_paragraph, $index, 0);
-            } else if (is_page() && $after_first_page_paragraph_block != "") {
+            } else if (is_page()
+                && $after_first_page_paragraph_block != ""
+                && intval($options['min-char-count']) <= $char_count
+                && intval($options['min-word-count']) <= $word_count
+                && intval($options['min-paragraph-count']) <= $paragraph_count
+            ) {
                 $after_first_page_paragraph = WPAI_Settings::get_ad_block($blocks, $after_first_page_paragraph_block);
-                $content = str_replace('</P>', '</p>', $content);
                 $index = 0;
                 for ($i = 0; $i < 1; $i++) {
                     $index = strpos($content, '</p>', $index) + 4;
@@ -510,55 +567,8 @@ if (!class_exists('WordPress_Advertize_It')) {
 
             $options = $this->modules['WPAI_Settings']->settings['options'];
 
-            $suppress_post_id = $this->get_suppress_post_id($options);
-            $suppress_category = $this->get_suppress_category($options);
-            $suppress_tag = $this->get_suppress_tag($options);
-            $suppress_user = $this->get_suppress_user($options);
-
-            if (count($suppress_user) > 0 && in_array(get_the_author_meta('ID'), $suppress_user)) {
-                $all_below_footer_block = "";
-            }
-            if (count($suppress_tag) > 0 && has_tag($suppress_tag)) {
-                $all_below_footer_block = "";
-            }
-            if (count($suppress_category) > 0 && has_category($suppress_category)) {
-                $all_below_footer_block = "";
-            }
-            if (!is_feed() && in_array(get_the_ID(), $suppress_post_id)) {
-                $all_below_footer_block = "";
-            }
-            if (!is_feed() && strpos($content, '<!--NoAds-->') !== false) {
-                $all_below_footer_block = "";
-            }
-            if (!is_feed() && strpos($content, '<!--NoBelowFooterAds-->') !== false) {
-                $all_below_footer_block = "";
-            }
-            if (is_single() && $options['suppress-on-posts'] == 1) {
-                $all_below_footer_block = "";
-            }
-            if (is_page() && $options['suppress-on-pages'] == 1) {
-                $all_below_footer_block = "";
-            }
-            if (is_attachment() && $options['suppress-on-attachment'] == 1) {
-                $all_below_footer_block = "";
-            }
-            if (is_category() && $options['suppress-on-category'] == 1) {
-                $all_below_footer_block = "";
-            }
-            if (is_tag() && $options['suppress-on-tag'] == 1) {
-                $all_below_footer_block = "";
-            }
-            if (is_home() && $options['suppress-on-home'] == 1) {
-                $all_below_footer_block = "";
-            }
-            if (is_front_page() && $options['suppress-on-front'] == 1) {
-                $all_below_footer_block = "";
-            }
-            if (is_archive() && $options['suppress-on-archive'] == 1) {
-                $all_below_footer_block = "";
-            }
-            if (is_user_logged_in() && $options['suppress-on-logged-in'] == 1) {
-                $all_below_footer_block = "";
+            if ($this->is_suppress_specific($options, $content)) {
+                return;
             }
 
             if ($all_below_footer_block != "") {
@@ -581,70 +591,8 @@ if (!class_exists('WordPress_Advertize_It')) {
 
             $options = $this->modules['WPAI_Settings']->settings['options'];
 
-            $suppress_post_id = $this->get_suppress_post_id($options);
-            $suppress_category = $this->get_suppress_category($options);
-            $suppress_tag = $this->get_suppress_tag($options);
-            $suppress_user = $this->get_suppress_user($options);
-
-            if (count($suppress_user) > 0 && in_array(get_the_author_meta('ID'), $suppress_user)) {
-                $post_below_comments_block = "";
-                $page_below_comments_block = "";
-            }
-            if (count($suppress_tag) > 0 && has_tag($suppress_tag)) {
-                $post_below_comments_block = "";
-                $page_below_comments_block = "";
-            }
-            if (count($suppress_category) > 0 && has_category($suppress_category)) {
-                $post_below_comments_block = "";
-                $page_below_comments_block = "";
-            }
-            if (!is_feed() && in_array(get_the_ID(), $suppress_post_id)) {
-                $post_below_comments_block = "";
-                $page_below_comments_block = "";
-            }
-            if (!is_feed() && strpos($content, '<!--NoAds-->') !== false) {
-                $post_below_comments_block = "";
-                $page_below_comments_block = "";
-            }
-            if (!is_feed() && strpos($content, '<!--NoBelowCommentsAds-->') !== false) {
-                $post_below_comments_block = "";
-                $page_below_comments_block = "";
-            }
-            if (is_single() && $options['suppress-on-posts'] == 1) {
-                $post_below_comments_block = "";
-                $page_below_comments_block = "";
-            }
-            if (is_page() && $options['suppress-on-pages'] == 1) {
-                $post_below_comments_block = "";
-                $page_below_comments_block = "";
-            }
-            if (is_attachment() && $options['suppress-on-attachment'] == 1) {
-                $post_below_comments_block = "";
-                $page_below_comments_block = "";
-            }
-            if (is_category() && $options['suppress-on-category'] == 1) {
-                $post_below_comments_block = "";
-                $page_below_comments_block = "";
-            }
-            if (is_tag() && $options['suppress-on-tag'] == 1) {
-                $post_below_comments_block = "";
-                $page_below_comments_block = "";
-            }
-            if (is_home() && $options['suppress-on-home'] == 1) {
-                $post_below_comments_block = "";
-                $page_below_comments_block = "";
-            }
-            if (is_front_page() && $options['suppress-on-front'] == 1) {
-                $post_below_comments_block = "";
-                $page_below_comments_block = "";
-            }
-            if (is_archive() && $options['suppress-on-archive'] == 1) {
-                $post_below_comments_block = "";
-                $page_below_comments_block = "";
-            }
-            if (is_user_logged_in() && $options['suppress-on-logged-in'] == 1) {
-                $post_below_comments_block = "";
-                $page_below_comments_block = "";
+            if ($this->is_suppress_specific($options, $content)) {
+                return;
             }
 
             if ($post_below_comments_block != "") {
