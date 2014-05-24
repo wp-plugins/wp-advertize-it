@@ -54,6 +54,10 @@ And the following options are available:
 * Suppress ads for posts/pages in a specific category
 * Suppress ads for posts/pages with a specific tag
 * Suppress ads for posts/pages by a specific author
+* Suppress ads for posts/pages with a specific post format
+* Suppress ads for posts/pages of a specific post type
+* Suppress ads which URL contains one of the specified strings
+* Suppress ads in the post for small posts (minimum number of characters, words, paragraphs)
 
 If you need more fine grain control on where and whether ads are displayed or not, this plugin also defines supports:
 
