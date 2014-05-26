@@ -11,7 +11,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         protected static $writeable_properties = array();
         protected $modules;
 
-        const VERSION = '0.4';
+        const VERSION = '0.4.1';
         const PREFIX = 'wpai_';
         const DEBUG_MODE = false;
 
@@ -343,7 +343,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         public function in_array_substr($needle, $haystack)
         {
             foreach ($haystack as $hay_item) {
-                if (strpos($needle, $hay_item)) {
+                if ($hay_item !== "" && strpos($needle, $hay_item)) {
                     return true;
                 }
             }
