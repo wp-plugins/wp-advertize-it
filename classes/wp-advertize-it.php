@@ -11,7 +11,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         protected static $writeable_properties = array();
         protected $modules;
 
-        const VERSION = '0.5';
+        const VERSION = '0.5.1';
         const PREFIX = 'wpai_';
         const DEBUG_MODE = false;
 
@@ -301,6 +301,16 @@ if (!class_exists('WordPress_Advertize_It')) {
                 array_push($suppress_url, $id);
             }
             return $suppress_url;
+        }
+
+        public function get_suppress_ipaddress($options)
+        {
+            $suppress_ipaddress = array();
+
+            foreach (explode(',', $options['suppress-ipaddress']) as $id) {
+                array_push($suppress_ipaddress, $id);
+            }
+            return $suppress_ipaddress;
         }
 
         public function get_suppress_referrer($options)
