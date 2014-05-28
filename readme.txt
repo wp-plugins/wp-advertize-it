@@ -4,7 +4,7 @@ Donate link: http://benohead.com/donate/
 Tags: ad, ad banner, ad block, ads, ads display, ads in widgets, ads on website, ads plugin, adsense, adsense plugin, advertisement, advertisements, advertiser, advertising, Goggle AdSense, google ads, google adsense, insert ads, insert ads automatically, insert Google ads, publisher, widget
 Requires at least: 3.0.1
 Tested up to: 3.9.1
-Stable tag: 0.4.1
+Stable tag: 0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -100,22 +100,36 @@ Send an email to henri.benoit@gmail.com
 
 == Changelog ==
 
+= 0.5 =
+
+* Suppress ads on error page
+* Suppress ads on author page
+* Suppress ads for specific languages (this option is only available with the plugin qTranslate or mqTranslate)
+* Suppress ads on WPtouch mobile site
+* Suppress ads for specific referrers
+* Suppress ads for specific IP addresses
+
 = 0.4.1 =
-Bug fix
+
+* Bug fix
 
 = 0.4 =
-Suppress ads by post format and post type
-Suppress based on substrings in URL
-Suppress for small posts (with a minimum number characters, words and paragraphs)
+
+* Suppress ads by post format and post type
+* Suppress based on substrings in URL
+* Suppress for small posts (with a minimum number characters, words and paragraphs)
 
 = 0.3 =
-Suppress ads by category, tag and author
+
+* Suppress ads by category, tag and author
 
 = 0.2 =
-Suppress ads by post/page ID
+
+* Suppress ads by post/page ID
 
 = 0.1 =
-First version.
+
+* First version.
 
 == Upgrade Notice ==
 

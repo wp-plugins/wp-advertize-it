@@ -11,7 +11,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         protected static $writeable_properties = array();
         protected $modules;
 
-        const VERSION = '0.4.1';
+        const VERSION = '0.5';
         const PREFIX = 'wpai_';
         const DEBUG_MODE = false;
 
@@ -303,6 +303,16 @@ if (!class_exists('WordPress_Advertize_It')) {
             return $suppress_url;
         }
 
+        public function get_suppress_referrer($options)
+        {
+            $suppress_referrer = array();
+
+            foreach (explode(',', $options['suppress-referrer']) as $id) {
+                array_push($suppress_referrer, $id);
+            }
+            return $suppress_referrer;
+        }
+
         private function to_int_array($array_in)
         {
             $array_out = array();
@@ -340,6 +350,11 @@ if (!class_exists('WordPress_Advertize_It')) {
             return $options['suppress-post-type'];
         }
 
+        public function get_suppress_language($options)
+        {
+            return $options['suppress-language'];
+        }
+
         public function in_array_substr($needle, $haystack)
         {
             foreach ($haystack as $hay_item) {
@@ -358,14 +373,20 @@ if (!class_exists('WordPress_Advertize_It')) {
             $suppress_user = $this->get_suppress_user($options);
             $suppress_format = $this->get_suppress_format($options);
             $suppress_post_type = $this->get_suppress_post_type($options);
+            $suppress_language = $this->get_suppress_language($options);
             $suppress_url = $this->get_suppress_url($options);
+            $suppress_referrer = $this->get_suppress_referrer($options);
+            $suppress_ipaddress = $this->get_suppress_ipaddress($options);
 
             return ((count($suppress_format) > 0 && in_array(get_post_format(), $suppress_format))
                 || (count($suppress_user) > 0 && in_array(get_the_author_meta('ID'), $suppress_user))
                 || (count($suppress_tag) > 0 && has_tag($suppress_tag))
                 || (count($suppress_category) > 0 && has_category($suppress_category))
                 || (count($suppress_post_type) > 0 && in_array(get_post_type(get_the_ID()), $suppress_post_type))
+                || (count($suppress_language) > 0 && function_exists('qtrans_getLanguage') && in_array(qtrans_getLanguage(), $suppress_language))
                 || (count($suppress_url) > 0 && $this->in_array_substr(get_the_permalink(), $suppress_url))
+                || (count($suppress_referrer) > 0 && $this->in_array_substr($_SERVER['HTTP_REFERER'], $suppress_referrer))
+                || (count($suppress_ipaddress) > 0 && $this->in_array_substr($_SERVER['REMOTE_ADDR'], $suppress_ipaddress))
                 || (!is_feed() && in_array(get_the_ID(), $suppress_post_id))
                 || (!is_feed() && strpos($content, '<!--NoAds-->') !== false)
                 || (!is_feed() && strpos($content, '<!--NoWidgetAds-->') !== false)
@@ -377,6 +398,9 @@ if (!class_exists('WordPress_Advertize_It')) {
                 || (is_home() && $options['suppress-on-home'] == 1)
                 || (is_front_page() && $options['suppress-on-front'] == 1)
                 || (is_archive() && $options['suppress-on-archive'] == 1)
+                || (is_author() && $options['suppress-on-author'] == 1)
+                || (is_404() && $options['suppress-on-error'] == 1)
+                || (function_exists( 'bnc_wptouch_is_mobile' ) && bnc_wptouch_is_mobile() && $options['suppress-on-wptouch'] == 1)
                 || (is_user_logged_in() && $options['suppress-on-logged-in'] == 1)
             );
         }

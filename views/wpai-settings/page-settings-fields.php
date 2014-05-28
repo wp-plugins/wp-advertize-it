@@ -339,6 +339,21 @@ elseif ('wpai_suppress-on-archive' == $field['label_for']) : ?>
            id="wpai_settings[options][suppress-on-archive]"
            value="1" <?php checked(1, $settings['options']['suppress-on-archive']) ?>>
 <?php
+elseif ('wpai_suppress-on-author' == $field['label_for']) : ?>
+    <input type="checkbox" name="wpai_settings[options][suppress-on-author]"
+           id="wpai_settings[options][suppress-on-author]"
+           value="1" <?php checked(1, $settings['options']['suppress-on-author']) ?>>
+<?php
+elseif ('wpai_suppress-on-error' == $field['label_for']) : ?>
+    <input type="checkbox" name="wpai_settings[options][suppress-on-error]"
+           id="wpai_settings[options][suppress-on-error]"
+           value="1" <?php checked(1, $settings['options']['suppress-on-error']) ?>>
+<?php
+elseif ('wpai_suppress-on-wptouch' == $field['label_for']) : ?>
+    <input type="checkbox" name="wpai_settings[options][suppress-on-wptouch]"
+           id="wpai_settings[options][suppress-on-wptouch]"
+           value="1" <?php checked(1, $settings['options']['suppress-on-wptouch']) ?>>
+<?php
 elseif ('wpai_suppress-on-logged-in' == $field['label_for']) : ?>
     <input type="checkbox" name="wpai_settings[options][suppress-on-logged-in]"
            id="wpai_settings[options][suppress-on-logged-in]"
@@ -447,6 +462,29 @@ elseif ('wpai_suppress-post-type' == $field['label_for']) : ?>
         Clear
     </button>
 <?php
+elseif ('wpai_suppress-language' == $field['label_for'] && function_exists('qtrans_getSortedLanguages')) : ?>
+    <?php $languages = qtrans_getSortedLanguages(); ?>
+    <select style="min-width: 190px;" id="wpai_settings[options][suppress-language]"
+            name="wpai_settings[options][suppress-language][]" size="4"
+            multiple="multiple">
+        <?php
+        foreach ($languages as $language_name) {
+            ?>
+            <option
+                value="<?php echo esc_attr($language_name); ?>" <?php echo(in_array($language_name, (array)$settings['options']['suppress-language']) ? 'selected="selected"' : ''); ?>><?php echo $q_config['language_name'][$language_name]; ?></option>
+        <?php
+        }
+        ?>
+    </select>
+    <button id="clear-language" class="button-secondary"
+            onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-language\\]')[0].selectedIndex = -1;return false;">
+        Clear
+    </button>
+<?php
+elseif ('wpai_suppress-language' == $field['label_for']) : ?>
+    <p>This option is only available with the plugin <a href="https://wordpress.org/plugins/qtranslate/">qTranslate</a>
+        or <a href="https://wordpress.org/plugins/mqtranslate/">mqTranslate</a>.</p>
+<?php
 elseif ('wpai_min-char-count' == $field['label_for']) : ?>
     <input type="text" name="wpai_settings[options][min-char-count]"
            id="wpai_settings[options][min-char-count]"
@@ -466,4 +504,14 @@ elseif ('wpai_suppress-url' == $field['label_for']) : ?>
     <input type="text" name="wpai_settings[options][suppress-url]"
            id="wpai_settings[options][suppress-url]"
            value="<?php echo $settings['options']['suppress-url']; ?>">
+<?php
+elseif ('wpai_suppress-referrer' == $field['label_for']) : ?>
+    <input type="text" name="wpai_settings[options][suppress-referrer]"
+           id="wpai_settings[options][suppress-referrer]"
+           value="<?php echo $settings['options']['suppress-referrer']; ?>">
+<?php
+elseif ('wpai_suppress-ipaddress' == $field['label_for']) : ?>
+    <input type="text" name="wpai_settings[options][suppress-ipaddress]"
+           id="wpai_settings[options][suppress-ipaddress]"
+           value="<?php echo $settings['options']['suppress-ipaddress']; ?>">
 <?php endif; ?>

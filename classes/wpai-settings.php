@@ -171,7 +171,10 @@ if (!class_exists('WPAI_Settings')) {
                 "suppress_on_tag" => false,
                 "suppress_on_home" => false,
                 "suppress_on_front" => false,
+                "suppress_on_author" => false,
                 "suppress_on_archive" => false,
+                "suppress_on_error" => false,
+                "suppress_on_wptouch" => false,
                 "suppress_on_logged_in" => false,
                 "suppress-post-id" => "",
                 "suppress-category" => array(),
@@ -179,7 +182,10 @@ if (!class_exists('WPAI_Settings')) {
                 "suppress-user" => array(),
                 "suppress-format" => array(),
                 "suppress-post-type" => array(),
+                "suppress-language" => array(),
                 "suppress-url" => "",
+                "suppress-referrer" => "",
+                "suppress-ipaddress" => "",
                 "min-char-count" => 0,
                 "min-word-count" => 0,
                 "min-paragraph-count" => 0
@@ -339,13 +345,16 @@ if (!class_exists('WPAI_Settings')) {
 
             $this->add_settings_field_options('wpai_suppress-on-posts', 'Suppress ads on posts');
             $this->add_settings_field_options('wpai_suppress-on-pages', 'Suppress ads on pages');
-            $this->add_settings_field_options('wpai_suppress-on-attachment', 'Suppress ads on attachment');
-            $this->add_settings_field_options('wpai_suppress-on-category', 'Suppress ads on category');
-            $this->add_settings_field_options('wpai_suppress-on-tag', 'Suppress ads on tag');
+            $this->add_settings_field_options('wpai_suppress-on-attachment', 'Suppress ads on attachment page');
+            $this->add_settings_field_options('wpai_suppress-on-category', 'Suppress ads on category page');
+            $this->add_settings_field_options('wpai_suppress-on-tag', 'Suppress ads on tag page');
             $this->add_settings_field_options('wpai_suppress-on-home', 'Suppress ads on home page');
             $this->add_settings_field_options('wpai_suppress-on-front', 'Suppress ads on front page');
-            $this->add_settings_field_options('wpai_suppress-on-archive', 'Suppress ads on archive');
+            $this->add_settings_field_options('wpai_suppress-on-archive', 'Suppress ads on archive page');
+            $this->add_settings_field_options('wpai_suppress-on-error', 'Suppress ads on error page');
+            $this->add_settings_field_options('wpai_suppress-on-author', 'Suppress ads on author page');
             $this->add_settings_field_options('wpai_suppress-on-logged-in', 'Suppress ads for logged in users');
+            $this->add_settings_field_options('wpai_suppress-on-wptouch', 'Suppress ads on WPtouch mobile site');
             $this->add_settings_field_options('wpai_suppress-post-id', 'Suppress ads for specific post/page IDs');
             $this->add_settings_field_options('wpai_suppress-category', 'Suppress ads for specific categories');
             $this->add_settings_field_options('wpai_suppress-tag', 'Suppress ads for specific tags');
@@ -354,7 +363,10 @@ if (!class_exists('WPAI_Settings')) {
                 $this->add_settings_field_options('wpai_suppress-format', 'Suppress ads for specific post formats');
             }
             $this->add_settings_field_options('wpai_suppress-post-type', 'Suppress ads for specific post types');
+            $this->add_settings_field_options('wpai_suppress-language', 'Suppress ads for specific languages');
             $this->add_settings_field_options('wpai_suppress-url', 'Suppress ads for specific URL paths');
+            $this->add_settings_field_options('wpai_suppress-referrer', 'Suppress ads for specific referrers');
+            $this->add_settings_field_options('wpai_suppress-ipaddress', 'Suppress ads for specific IP addresses');
             $this->add_settings_field_options('wpai_min-char-count', 'Min. character count for inline ads');
             $this->add_settings_field_options('wpai_min-word-count', 'Min. word count for inline ads');
             $this->add_settings_field_options('wpai_min-paragraph-count', 'Min. paragraph count for inline ads');
@@ -393,7 +405,8 @@ if (!class_exists('WPAI_Settings')) {
          */
         public function markup_fields($field)
         {
-            echo self::render_template('wpai-settings/page-settings-fields.php', array('settings' => $this->settings, 'field' => $field), 'always');
+            global $q_config;
+            echo self::render_template('wpai-settings/page-settings-fields.php', array('settings' => $this->settings, 'field' => $field, 'q_config' => $q_config), 'always');
         }
 
         private function setting_default_if_not_set($new_settings, $section, $id, $value)
@@ -481,6 +494,9 @@ if (!class_exists('WPAI_Settings')) {
             $this->setting_zero_if_not_set($new_settings, 'options', 'suppress-on-home');
             $this->setting_zero_if_not_set($new_settings, 'options', 'suppress-on-front');
             $this->setting_zero_if_not_set($new_settings, 'options', 'suppress-on-archive');
+            $this->setting_zero_if_not_set($new_settings, 'options', 'suppress-on-error');
+            $this->setting_zero_if_not_set($new_settings, 'options', 'suppress-on-wptouch');
+            $this->setting_zero_if_not_set($new_settings, 'options', 'suppress-on-author');
             $this->setting_zero_if_not_set($new_settings, 'options', 'suppress-on-logged-in');
             $this->setting_empty_string_if_not_set($new_settings, 'options', 'suppress-post-id');
             $this->setting_empty_array_if_not_set($new_settings, 'options', 'suppress-category');
@@ -488,7 +504,10 @@ if (!class_exists('WPAI_Settings')) {
             $this->setting_empty_array_if_not_set($new_settings, 'options', 'suppress-user');
             $this->setting_empty_array_if_not_set($new_settings, 'options', 'suppress-format');
             $this->setting_empty_array_if_not_set($new_settings, 'options', 'suppress-post-type');
+            $this->setting_empty_array_if_not_set($new_settings, 'options', 'suppress-language');
             $this->setting_empty_string_if_not_set($new_settings, 'options', 'suppress-url');
+            $this->setting_empty_string_if_not_set($new_settings, 'options', 'suppress-referrer');
+            $this->setting_empty_string_if_not_set($new_settings, 'options', 'suppress-ipaddress');
             $this->setting_zero_if_not_set($new_settings, 'options', 'min-char-count');
             $this->setting_zero_if_not_set($new_settings, 'options', 'min-word-count');
             $this->setting_zero_if_not_set($new_settings, 'options', 'min-paragraph-count');
