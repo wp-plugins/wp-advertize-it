@@ -11,7 +11,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         protected static $writeable_properties = array();
         protected $modules;
 
-        const VERSION = '0.5.1';
+        const VERSION = '0.6';
         const PREFIX = 'wpai_';
         const DEBUG_MODE = false;
 
@@ -79,6 +79,9 @@ if (!class_exists('WordPress_Advertize_It')) {
             );
 
             if (is_admin()) {
+                if (!did_action('wp_enqueue_media')) {
+                    wp_enqueue_media();
+                }
                 wp_enqueue_style(self::PREFIX . 'admin');
                 wp_enqueue_script(self::PREFIX . 'wp-advertize-it-admin');
                 wp_enqueue_script(self::PREFIX . 'edit-area');
@@ -410,7 +413,7 @@ if (!class_exists('WordPress_Advertize_It')) {
                 || (is_archive() && $options['suppress-on-archive'] == 1)
                 || (is_author() && $options['suppress-on-author'] == 1)
                 || (is_404() && $options['suppress-on-error'] == 1)
-                || (function_exists( 'bnc_wptouch_is_mobile' ) && bnc_wptouch_is_mobile() && $options['suppress-on-wptouch'] == 1)
+                || (function_exists('bnc_wptouch_is_mobile') && bnc_wptouch_is_mobile() && $options['suppress-on-wptouch'] == 1)
                 || (is_user_logged_in() && $options['suppress-on-logged-in'] == 1)
             );
         }

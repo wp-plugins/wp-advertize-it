@@ -3,7 +3,7 @@
 Plugin Name: WP Advertize It
 Plugin URI:  https://wordpress.org/plugins/wp-advertize-it/
 Description: A plugin to place adsense blocks on your site
-Version:     0.5.1
+Version:     0.6
 Author:      Henri Benoit
 Author URI:  http://benohead.com
 */
@@ -62,6 +62,7 @@ if (wpai_requirements_met()) {
     require_once(__DIR__ . '/classes/wpai-settings.php');
     require_once(__DIR__ . '/classes/wpai-instance-class.php');
     require_once(__DIR__ . '/classes/wpai-widget.php');
+    require_once(__DIR__ . '/classes/wpai-image-widget.php');
 
     if (class_exists('WordPress_Advertize_It')) {
         $GLOBALS['wpai'] = WordPress_Advertize_It::get_instance();

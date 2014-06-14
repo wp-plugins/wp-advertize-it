@@ -36,6 +36,7 @@ class WPAI_Widget extends WP_Widget
         $block = $instance['block'];
         $blocks = WPAI_Settings::get_instance()->settings['blocks'];
         echo WPAI_Settings::get_ad_block($blocks, $block);
+        echo $args['after_widget'];
     }
 
     public function form($instance)

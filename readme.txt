@@ -4,7 +4,7 @@ Donate link: http://benohead.com/donate/
 Tags: ad, ad banner, ad block, ads, ads display, ads in widgets, ads on website, ads plugin, adsense, adsense plugin, advertisement, advertisements, advertiser, advertising, Goggle AdSense, google ads, google adsense, insert ads, insert ads automatically, insert Google ads, publisher, widget
 Requires at least: 3.0.1
 Tested up to: 3.9.1
-Stable tag: 0.5.1
+Stable tag: 0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,6 +75,14 @@ If you need more fine grain control on where and whether ads are displayed or no
     * suppress the ad widget
     * suppress the footer
 
+You can also create your own sidebar ads by using the new ad image widget:
+
+* Add the widget to the sidebar.
+* Upload an image, select an image from the media library or just type in a URL pointing to an image
+* Specify a description (shown when the image doesn't load and as tooltip on mouseover)
+* Specify a link URL which will be opened when clicked
+* Decide whether to maximize the width of the image and whether to open the link in  a new window.
+
 == Installation ==
 
 1. Upload the folder `wp-advertize-it` to the `/wp-content/plugins/`
@@ -99,6 +107,10 @@ Send an email to henri.benoit@gmail.com
 5. Widget configuration
 
 == Changelog ==
+
+= 0.6 =
+
+* Added new widget to where you can upload an image (or choose an existing image in your media library) and specify a link URL.
 
 = 0.5.1 =
 
