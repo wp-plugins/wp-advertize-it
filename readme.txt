@@ -1,5 +1,5 @@
 === Plugin Name ===
-Contributors: benohead
+Contributors: benohead, amazingweb-gmbh
 Donate link: http://benohead.com/donate/
 Tags: ad, ad banner, ad block, ads, ads display, ads in widgets, ads on website, ads plugin, adsense, adsense plugin, advertisement, advertisements, advertiser, advertising, Goggle AdSense, google ads, google adsense, insert ads, insert ads automatically, insert Google ads, publisher, widget
 Requires at least: 3.0.1
