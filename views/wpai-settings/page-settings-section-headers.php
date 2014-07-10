@@ -26,7 +26,7 @@
                 jQuery(this).closest('tr').children('th').first().prepend(jQuery(this));
             });
             jQuery('.placement-block-select').each(function () {
-                jQuery(this).append('<option data-block-id="wpai_block-' + (lastIndex + 1) + '" value="' + lastIndex + '" style="padding-right: 10px;">Ad Block ' + (lastIndex + 1) + '</option>')
+                jQuery(this).append('<option data-block-id="wpai_block-' + (lastIndex + 1) + '" value="' + lastIndex + '" style="padding-right: 10px;">Ad Block ' + (lastIndex + 1) + '</option>');
                 resortSelect(jQuery(this));
             });
             editAreaLoader.init({
@@ -42,7 +42,7 @@
                 if (a.value > b.value) return 1;
                 else if (a.value < b.value) return -1;
                 else return 0
-            })
+            });
 
             select.html(selectList);
             select.val(value);
@@ -65,8 +65,8 @@
     </script>
     <p>Define here different ad blocks by pasting adsense code. These blocks can then be placed at different locations
         on your site.</p>
-    <button id="add-block" class="button-secondary" onclick="javascript:addBlock();return false;">Add Block</button>
-    <button id="remove-block" class="button-secondary" onclick="javascript:removeBlocks();return false;">Remove Selected
+    <button id="add-block" class="button-secondary" onclick="addBlock();return false;">Add Block</button>
+    <button id="remove-block" class="button-secondary" onclick="removeBlocks();return false;">Remove Selected
         Blocks
     </button>
     <div style="display:none;" id="before-blocks"></div>

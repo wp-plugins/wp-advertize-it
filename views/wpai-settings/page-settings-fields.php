@@ -375,7 +375,7 @@ elseif ('wpai_suppress-category' == $field['label_for']) : ?>
         <?php } ?>
     </select>
     <button id="clear-category" class="button-secondary"
-            onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-category\\]')[0].selectedIndex = -1;return false;">
+            onclick="jQuery('#wpai_settings\\[options\\]\\[suppress-category\\]')[0].selectedIndex = -1;return false;">
         Clear
     </button>
 <?php
@@ -390,7 +390,7 @@ elseif ('wpai_suppress-tag' == $field['label_for']) : ?>
         <?php } ?>
     </select>
     <button id="clear-tag" class="button-secondary"
-            onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-tag\\]')[0].selectedIndex = -1;return false;">
+            onclick="jQuery('#wpai_settings\\[options\\]\\[suppress-tag\\]')[0].selectedIndex = -1;return false;">
         Clear
     </button>
 <?php
@@ -414,7 +414,7 @@ elseif ('wpai_suppress-user' == $field['label_for']) : ?>
         <?php } ?>
     </select>
     <button id="clear-user" class="button-secondary"
-            onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-user\\]')[0].selectedIndex = -1;return false;">
+            onclick="jQuery('#wpai_settings\\[options\\]\\[suppress-user\\]')[0].selectedIndex = -1;return false;">
         Clear
     </button>
 <?php
@@ -439,7 +439,7 @@ elseif ('wpai_suppress-format' == $field['label_for']) : ?>
         ?>
     </select>
     <button id="clear-format" class="button-secondary"
-            onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-format\\]')[0].selectedIndex = -1;return false;">
+            onclick="jQuery('#wpai_settings\\[options\\]\\[suppress-format\\]')[0].selectedIndex = -1;return false;">
         Clear
     </button>
 <?php
@@ -458,7 +458,7 @@ elseif ('wpai_suppress-post-type' == $field['label_for']) : ?>
         ?>
     </select>
     <button id="clear-post-type" class="button-secondary"
-            onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-post-type\\]')[0].selectedIndex = -1;return false;">
+            onclick="jQuery('#wpai_settings\\[options\\]\\[suppress-post-type\\]')[0].selectedIndex = -1;return false;">
         Clear
     </button>
 <?php
@@ -477,7 +477,7 @@ elseif ('wpai_suppress-language' == $field['label_for'] && function_exists('qtra
         ?>
     </select>
     <button id="clear-language" class="button-secondary"
-            onclick="javascript:jQuery('#wpai_settings\\[options\\]\\[suppress-language\\]')[0].selectedIndex = -1;return false;">
+            onclick="jQuery('#wpai_settings\\[options\\]\\[suppress-language\\]')[0].selectedIndex = -1;return false;">
         Clear
     </button>
 <?php
