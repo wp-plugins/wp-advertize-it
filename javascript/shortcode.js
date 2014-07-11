@@ -1,5 +1,5 @@
 (function () {
-    tinymce.create('tinymce.plugins.code', {
+    tinymce.create('tinymce.plugins.wpai', {
         init: function (editor, url) {
 
             editor.addButton('showad', {
@@ -17,7 +17,7 @@
                             {
                                 text: "Insert",
                                 onclick: function (e) {
-                                    editor.insertContent('[showad block=' + jQuery('#mce_39-body iframe').contents().find('#ad-block-select').val() + ']');
+                                    editor.insertContent('[showad block=' + jQuery('.mce-container-body iframe').contents().find('#ad-block-select').val() + ']');
                                     editor.windowManager.close();
                                 }
                             },
@@ -37,5 +37,5 @@
         // ... Hidden code
     });
     // Register plugin
-    tinymce.PluginManager.add('wpai', tinymce.plugins.code);
+    tinymce.PluginManager.add('wpai', tinymce.plugins.wpai);
 })();

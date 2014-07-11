@@ -11,7 +11,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         protected static $writeable_properties = array();
         protected $modules;
 
-        const VERSION = '0.6';
+        const VERSION = '0.6.1';
         const PREFIX = 'wpai_';
         const DEBUG_MODE = false;
 
