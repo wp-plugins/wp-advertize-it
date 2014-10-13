@@ -3,7 +3,7 @@
 Plugin Name: WP Advertize It
 Plugin URI:  https://wordpress.org/plugins/wp-advertize-it/
 Description: A plugin to place adsense blocks on your site
-Version:     0.6.1
+Version:     0.7
 Author:      Henri Benoit
 Author URI:  http://benohead.com
 */

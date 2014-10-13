@@ -6,6 +6,7 @@
 
 <?php if (strpos($field['label_for'], 'wpai_block-') === 0) : ?>
 
+	<div id="<?php esc_attr_e($field['label_for']); ?>_div"></div>
     <textarea style="width: 95%;" wrap="soft" rows="5" id="<?php esc_attr_e($field['label_for']); ?>"
               name="<?php esc_attr_e('wpai_settings[blocks][' . (intval(substr($field['label_for'], strlen('wpai_block-'))) - 1) . ']'); ?>"
               class="regular-text"><?php esc_attr_e($settings['blocks'][intval(substr($field['label_for'], strlen('wpai_block-'))) - 1]); ?></textarea>

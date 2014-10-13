@@ -21,7 +21,7 @@
                     lastIndex = currentIndex;
                 }
             });
-            jQuery('#before-blocks + table.form-table tbody').append('<tr><th scope="row"><label for="wpai_block-' + (lastIndex + 1) + '">Ad Block ' + (lastIndex + 1) + '</label></th><td><textarea style="width: 95%;" wrap="soft" rows="5" value="" class="regular-text" id="wpai_block-' + (lastIndex + 1) + '" name="wpai_settings[blocks][' + lastIndex + ']"></textarea><input type="checkbox" id="checkbox_wpai_settings[blocks][' + lastIndex + ']" data-ad-block="wpai_block-' + (lastIndex + 1) + '" class="delete-checkbox"></td></tr>');
+            jQuery('#before-blocks + table.form-table tbody').append('<tr><th scope="row"><label for="wpai_block-' + (lastIndex + 1) + '">Ad Block ' + (lastIndex + 1) + '</label><div for="wpai_block-' + (lastIndex + 1) + '_div"></div></th><td><textarea style="width: 95%;" wrap="soft" rows="5" value="" class="regular-text" id="wpai_block-' + (lastIndex + 1) + '" name="wpai_settings[blocks][' + lastIndex + ']"></textarea><input type="checkbox" id="checkbox_wpai_settings[blocks][' + lastIndex + ']" data-ad-block="wpai_block-' + (lastIndex + 1) + '" class="delete-checkbox"></td></tr>');
             jQuery('.delete-checkbox').each(function () {
                 jQuery(this).closest('tr').children('th').first().prepend(jQuery(this));
             });
@@ -29,10 +29,15 @@
                 jQuery(this).append('<option data-block-id="wpai_block-' + (lastIndex + 1) + '" value="' + lastIndex + '" style="padding-right: 10px;">Ad Block ' + (lastIndex + 1) + '</option>');
                 resortSelect(jQuery(this));
             });
-            editAreaLoader.init({
-                id: "wpai_block-" + (lastIndex + 1), syntax: "html", start_highlight: true, toolbar: "", EA_load_callback: "fEALoaded", allow_toggle: false, word_wrap: true
-            });
-
+	        var textarea = jQuery("wpai_block-" + (lastIndex + 1)).hide();
+	        var editor = ace.edit("wpai_block-" + (lastIndex + 1)+"_div");
+	        editor.setTheme("ace/theme/chrome");
+	        editor.getSession().setUseWrapMode(true);
+	        editor.getSession().setUseWorker(false);
+	        editor.getSession().setMode("ace/mode/html");
+	        editor.getSession().on('change', function(){
+		        textarea.val(editor.getSession().getValue());
+	        });
         }
 
         function resortSelect(select) {

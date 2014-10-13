@@ -11,7 +11,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         protected static $writeable_properties = array();
         protected $modules;
 
-        const VERSION = '0.6.1';
+        const VERSION = '0.7';
         const PREFIX = 'wpai_';
         const DEBUG_MODE = false;
 
@@ -54,21 +54,21 @@ if (!class_exists('WordPress_Advertize_It')) {
                 true
             );
 
-            wp_register_script(
-                self::PREFIX . 'wp-advertize-it-admin',
-                plugins_url('javascript/wp-advertize-it-admin.js', dirname(__FILE__)),
-                array('jquery'),
-                self::VERSION,
-                true
-            );
+	        wp_register_script(
+		        self::PREFIX . 'wp-advertize-it-admin',
+		        plugins_url('javascript/wp-advertize-it-admin.js', dirname(__FILE__)),
+		        array('jquery'),
+		        self::VERSION,
+		        true
+	        );
 
-            wp_register_script(
-                self::PREFIX . 'edit-area',
-                plugins_url('edit_area/edit_area_full.js', dirname(__FILE__)),
-                array(),
-                self::VERSION,
-                true
-            );
+	        wp_register_script(
+		        self::PREFIX . 'ace',
+		        plugins_url('ace/ace.js', dirname(__FILE__)),
+		        array('jquery'),
+		        self::VERSION,
+		        true
+	        );
 
             wp_register_style(
                 self::PREFIX . 'admin',
@@ -83,8 +83,8 @@ if (!class_exists('WordPress_Advertize_It')) {
                     wp_enqueue_media();
                 }
                 wp_enqueue_style(self::PREFIX . 'admin');
-                wp_enqueue_script(self::PREFIX . 'wp-advertize-it-admin');
-                wp_enqueue_script(self::PREFIX . 'edit-area');
+	            wp_enqueue_script(self::PREFIX . 'wp-advertize-it-admin');
+	            wp_enqueue_script(self::PREFIX . 'ace');
             } else {
                 wp_enqueue_script(self::PREFIX . 'wp-advertize-it');
             }

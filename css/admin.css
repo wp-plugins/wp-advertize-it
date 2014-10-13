@@ -12,10 +12,6 @@
     padding-top: 5px;
 }
 
-.settings_page_wpai_settings .delete-checkbox {
-    height: auto !important;
-}
-
 .settings_page_wpai_settings .underline {
     text-decoration: underline
 }
@@ -24,20 +20,10 @@
     list-style: disc inside none;
 }
 
-.settings_page_wpai_settings code, .settings_page_wpai_settings textarea {
-    background: none repeat scroll 0 0 #FFFFFF;
-    border-left: 11px solid #CCCCCC;
-    color: #555555;
-    font-family: "Courier New", Courier, monospace, sans-serif;
-    font-size: 11px;
-    line-height: 1.6em;
-    margin: 1.7em 0 1.7em 0.3em;
-    overflow: auto;
-    padding: 0.1em 0.5em 0.3em 0.7em;
-    text-align: left;
-    width: 93%;
+.settings_page_wpai_settings .ace_editor {
+    margin-bottom: 1.7em;
+    min-height: 150px;
 }
-
 .settings_page_wpai_settings textarea {
     margin-top: 0;
 }

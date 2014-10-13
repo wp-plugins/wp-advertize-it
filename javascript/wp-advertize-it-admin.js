@@ -8,7 +8,7 @@ function wpaiAdminWrapper($) {
          * Main entry point
          */
         init: function () {
-            wpaiAdmin.registerEditArea();
+            wpaiAdmin.registerAce();
             $('.media-button').click(function (e) {
                 e.preventDefault();
 
@@ -42,13 +42,17 @@ function wpaiAdminWrapper($) {
             });
         },
 
-        registerEditArea: function () {
+        registerAce: function () {
             jQuery('.settings_page_wpai_settings textarea').each(function () {
-                editAreaLoader.init({
-                    id: jQuery(this).attr('id')		// textarea id
-                    , syntax: "html"			// syntax to be uses for highgliting
-                    , start_highlight: true		// to display with highlight mode on start-up
-                    , toolbar: "", EA_load_callback: "fEALoaded", allow_toggle: false, word_wrap: true
+                var editor = ace.edit(jQuery(this).attr('id')+'_div');
+                var textarea = jQuery(this).hide();
+                editor.setTheme("ace/theme/chrome");
+                editor.getSession().setUseWrapMode(true);
+                editor.getSession().setUseWorker(false);
+                editor.getSession().setMode("ace/mode/html");
+                editor.getSession().setValue(jQuery(this).val());
+                editor.getSession().on('change', function(){
+                    textarea.val(editor.getSession().getValue());
                 });
             });
         }
@@ -59,10 +63,3 @@ function wpaiAdminWrapper($) {
 } // end wpaiAdminWrapper()
 
 wpaiAdminWrapper(jQuery);
-
-function fEALoaded() {
-    jQuery('.settings_page_wpai_settings textarea').each(function () {
-        jQuery('#frame_' + jQuery(this).attr('id')).contents().find('.area_toolbar').hide();
-        jQuery('#frame_' + jQuery(this).attr('id')).css("height", "auto");
-    });
-}
