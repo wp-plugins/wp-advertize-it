@@ -11,7 +11,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         protected static $writeable_properties = array();
         protected $modules;
 
-        const VERSION = '0.7';
+        const VERSION = '0.7.1';
         const PREFIX = 'wpai_';
         const DEBUG_MODE = false;
 
@@ -340,32 +340,32 @@ if (!class_exists('WordPress_Advertize_It')) {
 
         public function get_suppress_category($options)
         {
-            return $this->to_int_array($options['suppress-category']);
+            return isset($options['suppress-category']) && $this->to_int_array($options['suppress-category']);
         }
 
         public function get_suppress_tag($options)
         {
-            return $this->to_int_array($options['suppress-tag']);
+            return isset($options['suppress-tag']) && $this->to_int_array($options['suppress-tag']);
         }
 
         public function get_suppress_user($options)
         {
-            return $this->to_int_array($options['suppress-user']);
+            return isset($options['suppress-user']) && $this->to_int_array($options['suppress-user']);
         }
 
         public function get_suppress_format($options)
         {
-            return $options['suppress-format'];
+            return isset($options['suppress-format']) && $options['suppress-format'];
         }
 
         public function get_suppress_post_type($options)
         {
-            return $options['suppress-post-type'];
+            return isset($options['suppress-post-type']) && $options['suppress-post-type'];
         }
 
         public function get_suppress_language($options)
         {
-            return $options['suppress-language'];
+            return isset($options['suppress-language']) && $options['suppress-language'];
         }
 
         public function in_array_substr($needle, $haystack)
@@ -391,15 +391,15 @@ if (!class_exists('WordPress_Advertize_It')) {
             $suppress_referrer = $this->get_suppress_referrer($options);
             $suppress_ipaddress = $this->get_suppress_ipaddress($options);
 
-            return ((count($suppress_format) > 0 && in_array(get_post_format(), $suppress_format))
-                || (count($suppress_user) > 0 && in_array(get_the_author_meta('ID'), $suppress_user))
-                || (count($suppress_tag) > 0 && has_tag($suppress_tag))
-                || (count($suppress_category) > 0 && has_category($suppress_category))
-                || (count($suppress_post_type) > 0 && in_array(get_post_type(get_the_ID()), $suppress_post_type))
-                || (count($suppress_language) > 0 && function_exists('qtrans_getLanguage') && in_array(qtrans_getLanguage(), $suppress_language))
-                || (count($suppress_url) > 0 && $this->in_array_substr(get_the_permalink(), $suppress_url))
-                || (count($suppress_referrer) > 0 && $this->in_array_substr($_SERVER['HTTP_REFERER'], $suppress_referrer))
-                || (count($suppress_ipaddress) > 0 && $this->in_array_substr($_SERVER['REMOTE_ADDR'], $suppress_ipaddress))
+            return ((is_array($suppress_format) && count($suppress_format) > 0 && in_array(get_post_format(), $suppress_format))
+                || (is_array($suppress_user) && count($suppress_user) > 0 && in_array(get_the_author_meta('ID'), $suppress_user))
+                || (is_array($suppress_tag) && count($suppress_tag) > 0 && has_tag($suppress_tag))
+                || (is_array($suppress_category) && count($suppress_category) > 0 && has_category($suppress_category))
+                || (is_array($suppress_post_type) && count($suppress_post_type) > 0 && in_array(get_post_type(get_the_ID()), $suppress_post_type))
+                || (is_array($suppress_language) && count($suppress_language) > 0 && function_exists('qtrans_getLanguage') && in_array(qtrans_getLanguage(), $suppress_language))
+                || (is_array($suppress_url) && count($suppress_url) > 0 && $this->in_array_substr(get_the_permalink(), $suppress_url))
+                || (is_array($suppress_referrer) && count($suppress_referrer) > 0 && $this->in_array_substr($_SERVER['HTTP_REFERER'], $suppress_referrer))
+                || (is_array($suppress_ipaddress) && count($suppress_ipaddress) > 0 && $this->in_array_substr($_SERVER['REMOTE_ADDR'], $suppress_ipaddress))
                 || (!is_feed() && in_array(get_the_ID(), $suppress_post_id))
                 || (!is_feed() && strpos($content, '<!--NoAds-->') !== false)
                 || (!is_feed() && strpos($content, '<!--NoWidgetAds-->') !== false)
@@ -414,7 +414,7 @@ if (!class_exists('WordPress_Advertize_It')) {
                 || (is_author() && $options['suppress-on-author'] == 1)
                 || (is_404() && $options['suppress-on-error'] == 1)
                 || (function_exists('bnc_wptouch_is_mobile') && bnc_wptouch_is_mobile() && $options['suppress-on-wptouch'] == 1)
-                || (is_user_logged_in() && $options['suppress-on-logged-in'] == 1)
+                || (is_user_logged_in() && isset($options['suppress-on-logged-in']) && $options['suppress-on-logged-in'] == 1)
             );
         }
 
