@@ -11,7 +11,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         protected static $writeable_properties = array();
         protected $modules;
 
-        const VERSION = '0.7.1';
+        const VERSION = '0.7.2';
         const PREFIX = 'wpai_';
         const DEBUG_MODE = false;
 
@@ -340,32 +340,32 @@ if (!class_exists('WordPress_Advertize_It')) {
 
         public function get_suppress_category($options)
         {
-            return isset($options['suppress-category']) && $this->to_int_array($options['suppress-category']);
+            return isset($options['suppress-category']) ? $this->to_int_array($options['suppress-category']) : array();
         }
 
         public function get_suppress_tag($options)
         {
-            return isset($options['suppress-tag']) && $this->to_int_array($options['suppress-tag']);
+            return isset($options['suppress-tag']) ? $this->to_int_array($options['suppress-tag']) : array();
         }
 
         public function get_suppress_user($options)
         {
-            return isset($options['suppress-user']) && $this->to_int_array($options['suppress-user']);
+            return isset($options['suppress-user']) ? $this->to_int_array($options['suppress-user']) : array();
         }
 
         public function get_suppress_format($options)
         {
-            return isset($options['suppress-format']) && $options['suppress-format'];
+            return isset($options['suppress-format']) ? $options['suppress-format'] : array();
         }
 
         public function get_suppress_post_type($options)
         {
-            return isset($options['suppress-post-type']) && $options['suppress-post-type'];
+            return isset($options['suppress-post-type']) ? $options['suppress-post-type'] : array();
         }
 
         public function get_suppress_language($options)
         {
-            return isset($options['suppress-language']) && $options['suppress-language'];
+            return isset($options['suppress-language']) ? $options['suppress-language'] : array();
         }
 
         public function in_array_substr($needle, $haystack)
@@ -403,16 +403,16 @@ if (!class_exists('WordPress_Advertize_It')) {
                 || (!is_feed() && in_array(get_the_ID(), $suppress_post_id))
                 || (!is_feed() && strpos($content, '<!--NoAds-->') !== false)
                 || (!is_feed() && strpos($content, '<!--NoWidgetAds-->') !== false)
-                || (is_single() && $options['suppress-on-posts'] == 1)
-                || (is_page() && $options['suppress-on-pages'] == 1)
-                || (is_attachment() && $options['suppress-on-attachment'] == 1)
-                || (is_category() && $options['suppress-on-category'] == 1)
-                || (is_tag() && $options['suppress-on-tag'] == 1)
-                || (is_home() && $options['suppress-on-home'] == 1)
-                || (is_front_page() && $options['suppress-on-front'] == 1)
-                || (is_archive() && $options['suppress-on-archive'] == 1)
-                || (is_author() && $options['suppress-on-author'] == 1)
-                || (is_404() && $options['suppress-on-error'] == 1)
+                || (is_single() && isset($options['suppress-on-posts']) && $options['suppress-on-posts'] == 1)
+                || (is_page() && isset($options['suppress-on-pages']) && $options['suppress-on-pages'] == 1)
+                || (is_attachment() && isset($options['suppress-on-attachment']) && $options['suppress-on-attachment'] == 1)
+                || (is_category() && isset($options['suppress-on-category']) && $options['suppress-on-category'] == 1)
+                || (is_tag() && isset($options['suppress-on-tag']) && $options['suppress-on-tag'] == 1)
+                || (is_home() && isset($options['suppress-on-home']) && $options['suppress-on-home'] == 1)
+                || (is_front_page() && isset($options['suppress-on-front']) && $options['suppress-on-front'] == 1)
+                || (is_archive() && isset($options['suppress-on-archive']) && $options['suppress-on-archive'] == 1)
+                || (is_author() && isset($options['suppress-on-author']) && $options['suppress-on-author'] == 1)
+                || (is_404() && isset($options['suppress-on-error']) && $options['suppress-on-error'] == 1)
                 || (function_exists('bnc_wptouch_is_mobile') && bnc_wptouch_is_mobile() && $options['suppress-on-wptouch'] == 1)
                 || (is_user_logged_in() && isset($options['suppress-on-logged-in']) && $options['suppress-on-logged-in'] == 1)
             );

@@ -305,60 +305,60 @@ elseif ('wpai_after-first-page-paragraph' == $field['label_for']) : ?>
 elseif ('wpai_suppress-on-posts' == $field['label_for']) : ?>
     <input type="checkbox" name="wpai_settings[options][suppress-on-posts]"
            id="wpai_settings[options][suppress-on-posts]"
-           value="1" <?php checked(1, $settings['options']['suppress-on-posts']) ?>>
+           value="1" <?php if (isset($settings['options']['suppress-on-posts'])) checked(1, $settings['options']['suppress-on-posts']) ?>>
 <?php
 elseif ('wpai_suppress-on-pages' == $field['label_for']) : ?>
     <input type="checkbox" name="wpai_settings[options][suppress-on-pages]"
            id="wpai_settings[options][suppress-on-pages]"
-           value="1" <?php checked(1, $settings['options']['suppress-on-pages']) ?>>
+           value="1" <?php if (isset($settings['options']['suppress-on-pages'])) checked(1, $settings['options']['suppress-on-pages']) ?>>
 <?php
 elseif ('wpai_suppress-on-attachment' == $field['label_for']) : ?>
     <input type="checkbox" name="wpai_settings[options][suppress-on-attachment]"
            id="wpai_settings[options][suppress-on-attachment]"
-           value="1" <?php checked(1, $settings['options']['suppress-on-attachment']) ?>>
+           value="1" <?php if (isset($settings['options']['suppress-on-attachment'])) checked(1, $settings['options']['suppress-on-attachment']) ?>>
 <?php
 elseif ('wpai_suppress-on-category' == $field['label_for']) : ?>
     <input type="checkbox" name="wpai_settings[options][suppress-on-category]"
            id="wpai_settings[options][suppress-on-category]"
-           value="1" <?php checked(1, $settings['options']['suppress-on-category']) ?>>
+           value="1" <?php if (isset($settings['options']['suppress-on-pages'])) checked(1, $settings['options']['suppress-on-category']) ?>>
 <?php
 elseif ('wpai_suppress-on-tag' == $field['label_for']) : ?>
     <input type="checkbox" name="wpai_settings[options][suppress-on-tag]" id="wpai_settings[options][suppress-on-tag]"
-           value="1" <?php checked(1, $settings['options']['suppress-on-tag']) ?>>
+           value="1" <?php if (isset($settings['options']['suppress-on-pages'])) checked(1, $settings['options']['suppress-on-tag']) ?>>
 <?php
 elseif ('wpai_suppress-on-home' == $field['label_for']) : ?>
     <input type="checkbox" name="wpai_settings[options][suppress-on-home]" id="wpai_settings[options][suppress-on-home]"
-           value="1" <?php checked(1, $settings['options']['suppress-on-home']) ?>>
+           value="1" <?php if (isset($settings['options']['suppress-on-home'])) checked(1, $settings['options']['suppress-on-home']) ?>>
 <?php
 elseif ('wpai_suppress-on-front' == $field['label_for']) : ?>
     <input type="checkbox" name="wpai_settings[options][suppress-on-front]"
            id="wpai_settings[options][suppress-on-front]"
-           value="1" <?php checked(1, $settings['options']['suppress-on-front']) ?>>
+           value="1" <?php if (isset($settings['options']['suppress-on-front'])) checked(1, $settings['options']['suppress-on-front']) ?>>
 <?php
 elseif ('wpai_suppress-on-archive' == $field['label_for']) : ?>
     <input type="checkbox" name="wpai_settings[options][suppress-on-archive]"
            id="wpai_settings[options][suppress-on-archive]"
-           value="1" <?php checked(1, $settings['options']['suppress-on-archive']) ?>>
+           value="1" <?php if (isset($settings['options']['suppress-on-archive'])) checked(1, $settings['options']['suppress-on-archive']) ?>>
 <?php
 elseif ('wpai_suppress-on-author' == $field['label_for']) : ?>
     <input type="checkbox" name="wpai_settings[options][suppress-on-author]"
            id="wpai_settings[options][suppress-on-author]"
-           value="1" <?php checked(1, $settings['options']['suppress-on-author']) ?>>
+           value="1" <?php if (isset($settings['options']['suppress-on-author'])) checked(1, $settings['options']['suppress-on-author']) ?>>
 <?php
 elseif ('wpai_suppress-on-error' == $field['label_for']) : ?>
     <input type="checkbox" name="wpai_settings[options][suppress-on-error]"
            id="wpai_settings[options][suppress-on-error]"
-           value="1" <?php checked(1, $settings['options']['suppress-on-error']) ?>>
+           value="1" <?php if (isset($settings['options']['suppress-on-error'])) checked(1, $settings['options']['suppress-on-error']) ?>>
 <?php
 elseif ('wpai_suppress-on-wptouch' == $field['label_for']) : ?>
     <input type="checkbox" name="wpai_settings[options][suppress-on-wptouch]"
            id="wpai_settings[options][suppress-on-wptouch]"
-           value="1" <?php checked(1, $settings['options']['suppress-on-wptouch']) ?>>
+           value="1" <?php if (isset($settings['options']['suppress-on-wptouch'])) checked(1, $settings['options']['suppress-on-wptouch']) ?>>
 <?php
 elseif ('wpai_suppress-on-logged-in' == $field['label_for']) : ?>
     <input type="checkbox" name="wpai_settings[options][suppress-on-logged-in]"
            id="wpai_settings[options][suppress-on-logged-in]"
-           value="1" <?php checked(1, $settings['options']['suppress-on-logged-in']) ?>>
+           value="1" <?php if (isset($settings['options']['suppress-on-logged-in'])) checked(1, $settings['options']['suppress-on-logged-in']) ?>>
 <?php
 elseif ('wpai_suppress-post-id' == $field['label_for']) : ?>
     <input type="text" name="wpai_settings[options][suppress-post-id]"
@@ -372,7 +372,7 @@ elseif ('wpai_suppress-category' == $field['label_for']) : ?>
             multiple="multiple">
         <?php foreach ($categories as $category) { ?>
             <option
-                value="<?php echo esc_attr($category->term_id); ?>" <?php echo(in_array($category->term_id, (array)$settings['options']['suppress-category']) ? 'selected="selected"' : ''); ?>><?php echo esc_html($category->name); ?></option>
+                value="<?php echo esc_attr($category->term_id); ?>" <?php echo(isset($settings['options']['suppress-category']) && in_array($category->term_id, (array)$settings['options']['suppress-category']) ? 'selected="selected"' : ''); ?>><?php echo esc_html($category->name); ?></option>
         <?php } ?>
     </select>
     <button id="clear-category" class="button-secondary"
@@ -387,7 +387,7 @@ elseif ('wpai_suppress-tag' == $field['label_for']) : ?>
             multiple="multiple">
         <?php foreach ($tags as $tag) { ?>
             <option
-                value="<?php echo esc_attr($tag->term_id); ?>" <?php echo(in_array($tag->term_id, (array)$settings['options']['suppress-tag']) ? 'selected="selected"' : ''); ?>><?php echo esc_html($tag->name); ?></option>
+                value="<?php echo esc_attr($tag->term_id); ?>" <?php echo(isset($settings['options']['suppress-tag']) && in_array($tag->term_id, (array)$settings['options']['suppress-tag']) ? 'selected="selected"' : ''); ?>><?php echo esc_html($tag->name); ?></option>
         <?php } ?>
     </select>
     <button id="clear-tag" class="button-secondary"
@@ -411,7 +411,7 @@ elseif ('wpai_suppress-user' == $field['label_for']) : ?>
             multiple="multiple">
         <?php foreach ($users as $user) { ?>
             <option
-                value="<?php echo esc_attr($user->ID); ?>" <?php echo(in_array($user->ID, (array)$settings['options']['suppress-user']) ? 'selected="selected"' : ''); ?>><?php echo esc_html($user->display_name); ?></option>
+                value="<?php echo esc_attr($user->ID); ?>" <?php echo(isset($settings['options']['suppress-user']) && in_array($user->ID, (array)$settings['options']['suppress-user']) ? 'selected="selected"' : ''); ?>><?php echo esc_html($user->display_name); ?></option>
         <?php } ?>
     </select>
     <button id="clear-user" class="button-secondary"
@@ -428,12 +428,12 @@ elseif ('wpai_suppress-format' == $field['label_for']) : ?>
         if (is_array($formats) && count($formats) > 0) {
             ?>
             <option
-                value="0" <?php echo(in_array('0', (array)$settings['options']['suppress-format']) ? 'selected="selected"' : ''); ?>><?php echo get_post_format_string('standard'); ?></option>
+                value="0" <?php echo(isset($settings['options']['suppress-format']) && in_array('0', (array)$settings['options']['suppress-format']) ? 'selected="selected"' : ''); ?>><?php echo get_post_format_string('standard'); ?></option>
             <?php
             foreach ($formats[0] as $format_name) {
                 ?>
                 <option
-                    value="<?php echo esc_attr($format_name); ?>" <?php echo(in_array($format_name, (array)$settings['options']['suppress-format']) ? 'selected="selected"' : ''); ?>><?php echo esc_html(get_post_format_string($format_name)); ?></option>
+                    value="<?php echo esc_attr($format_name); ?>" <?php echo(isset($settings['options']['suppress-format']) && in_array($format_name, (array)$settings['options']['suppress-format']) ? 'selected="selected"' : ''); ?>><?php echo esc_html(get_post_format_string($format_name)); ?></option>
             <?php
             }
         }
@@ -453,7 +453,7 @@ elseif ('wpai_suppress-post-type' == $field['label_for']) : ?>
         foreach ($post_types as $post_type_name) {
             ?>
             <option
-                value="<?php echo esc_attr($post_type_name); ?>" <?php echo(in_array($post_type_name, (array)$settings['options']['suppress-post-type']) ? 'selected="selected"' : ''); ?>><?php echo esc_html(get_post_type_object($post_type_name)->labels->name); ?></option>
+                value="<?php echo esc_attr($post_type_name); ?>" <?php echo(isset($settings['options']['suppress-post-type']) && in_array($post_type_name, (array)$settings['options']['suppress-post-type']) ? 'selected="selected"' : ''); ?>><?php echo esc_html(get_post_type_object($post_type_name)->labels->name); ?></option>
         <?php
         }
         ?>
@@ -472,7 +472,7 @@ elseif ('wpai_suppress-language' == $field['label_for'] && function_exists('qtra
         foreach ($languages as $language_name) {
             ?>
             <option
-                value="<?php echo esc_attr($language_name); ?>" <?php echo(in_array($language_name, (array)$settings['options']['suppress-language']) ? 'selected="selected"' : ''); ?>><?php echo $q_config['language_name'][$language_name]; ?></option>
+                value="<?php echo esc_attr($language_name); ?>" <?php echo(isset($settings['options']['suppress-language']) && in_array($language_name, (array)$settings['options']['suppress-language']) ? 'selected="selected"' : ''); ?>><?php echo $q_config['language_name'][$language_name]; ?></option>
         <?php
         }
         ?>
