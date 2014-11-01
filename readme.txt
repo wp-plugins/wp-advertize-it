@@ -4,7 +4,7 @@ Donate link: http://benohead.com/donate/
 Tags: ad, ad banner, ad block, ads, ads display, ads in widgets, ads on website, ads plugin, adsense, adsense plugin, advertisement, advertisements, advertiser, advertising, Goggle AdSense, google ads, google adsense, insert ads, insert ads automatically, insert Google ads, publisher, widget
 Requires at least: 3.0.1
 Tested up to: 4.0
-Stable tag: 0.7.2
+Stable tag: 0.7.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -107,6 +107,10 @@ Send an email to henri.benoit@gmail.com
 5. Widget configuration
 
 == Changelog ==
+
+= 0.7.3 =
+
+* Fixed "Call to undefined function get_the_permalink()" error in WordPress versions less than 3.9
 
 = 0.7.2 =
 
