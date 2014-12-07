@@ -11,7 +11,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         protected static $writeable_properties = array();
         protected $modules;
 
-        const VERSION = '0.7.3';
+        const VERSION = '0.7.4';
         const PREFIX = 'wpai_';
         const DEBUG_MODE = false;
 
@@ -54,21 +54,21 @@ if (!class_exists('WordPress_Advertize_It')) {
                 true
             );
 
-	        wp_register_script(
-		        self::PREFIX . 'wp-advertize-it-admin',
-		        plugins_url('javascript/wp-advertize-it-admin.js', dirname(__FILE__)),
-		        array('jquery'),
-		        self::VERSION,
-		        true
-	        );
+            wp_register_script(
+                self::PREFIX . 'wp-advertize-it-admin',
+                plugins_url('javascript/wp-advertize-it-admin.js', dirname(__FILE__)),
+                array('jquery'),
+                self::VERSION,
+                true
+            );
 
-	        wp_register_script(
-		        self::PREFIX . 'ace',
-		        plugins_url('ace/ace.js', dirname(__FILE__)),
-		        array('jquery'),
-		        self::VERSION,
-		        true
-	        );
+            wp_register_script(
+                self::PREFIX . 'ace',
+                plugins_url('ace/ace.js', dirname(__FILE__)),
+                array('jquery'),
+                self::VERSION,
+                true
+            );
 
             wp_register_style(
                 self::PREFIX . 'admin',
@@ -83,8 +83,8 @@ if (!class_exists('WordPress_Advertize_It')) {
                     wp_enqueue_media();
                 }
                 wp_enqueue_style(self::PREFIX . 'admin');
-	            wp_enqueue_script(self::PREFIX . 'wp-advertize-it-admin');
-	            wp_enqueue_script(self::PREFIX . 'ace');
+                wp_enqueue_script(self::PREFIX . 'wp-advertize-it-admin');
+                wp_enqueue_script(self::PREFIX . 'ace');
             } else {
                 wp_enqueue_script(self::PREFIX . 'wp-advertize-it');
             }
@@ -237,7 +237,7 @@ if (!class_exists('WordPress_Advertize_It')) {
                 'block' => ''
             ), $attributes));
 
-            if ($block !== '') {
+            if (isset($block) && $block !== '') {
                 return $this->get_ad_block($block);
             }
 
@@ -301,7 +301,9 @@ if (!class_exists('WordPress_Advertize_It')) {
             $suppress_url = array();
 
             foreach (explode(',', $options['suppress-url']) as $id) {
-                array_push($suppress_url, $id);
+                if ($id != "") {
+                    array_push($suppress_url, $id);
+                }
             }
             return $suppress_url;
         }
@@ -311,7 +313,9 @@ if (!class_exists('WordPress_Advertize_It')) {
             $suppress_ipaddress = array();
 
             foreach (explode(',', $options['suppress-ipaddress']) as $id) {
-                array_push($suppress_ipaddress, $id);
+                if ($id != "") {
+                    array_push($suppress_ipaddress, $id);
+                }
             }
             return $suppress_ipaddress;
         }
@@ -321,7 +325,9 @@ if (!class_exists('WordPress_Advertize_It')) {
             $suppress_referrer = array();
 
             foreach (explode(',', $options['suppress-referrer']) as $id) {
-                array_push($suppress_referrer, $id);
+                if ($id != "") {
+                    array_push($suppress_referrer, $id);
+                }
             }
             return $suppress_referrer;
         }
@@ -695,6 +701,5 @@ if (!class_exists('WordPress_Advertize_It')) {
             return true;
         }
     }
-
     ; // end WordPress_Advertize_It
 }

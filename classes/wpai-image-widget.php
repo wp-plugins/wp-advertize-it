@@ -82,7 +82,7 @@ class WPAI_Image_Widget extends WP_Widget
                    value="<?php echo esc_attr($title); ?>"/>
         </p>
         <p>
-        <?php if ($instance['image']): ?>
+        <?php if (isset($instance['image']) && $instance['image']): ?>
         <div>
             <img style="width:100%;" src="<?php echo $instance['image'] ?>"/>
         </div>
@@ -94,7 +94,7 @@ class WPAI_Image_Widget extends WP_Widget
         <br/>You can also paste in an image URL below.
         <input class="widefat wpai-image-url" placeholder="Image URL" type="text" id="<?php echo $image_id; ?>"
                name="<?php echo $this->get_field_name('image'); ?>"
-               value="<?php echo htmlentities($instance['image']); ?>"/>
+               value="<?php echo htmlentities(isset($instance['image']) ? $instance['image'] : ""); ?>"/>
         <br/>
         <label for="<?php echo $this->get_field_id('description'); ?>"><?php _e('Description:'); ?></label>
         <input class="widefat wpai-image-description" id="<?php echo $this->get_field_id('description'); ?>"
