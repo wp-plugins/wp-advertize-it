@@ -148,19 +148,20 @@ if (!class_exists('WPAI_Settings')) {
             $blocks = array();
 
             $placements = array(
-                "homepage_below_title" => "",
-                "post_below_title" => "",
-                "post_below_content" => "",
-                "post_below_comments" => "",
-                "page_below_title" => "",
-                "page_below_content" => "",
-                "page_below_comments" => "",
-                "all_below_footer" => "",
-                "middle_of_post" => "",
-                "before_last_post_paragraph" => "",
-                "before_last_page_paragraph" => "",
-                "after_first_post_paragraph" => "",
-                "after_first_page_paragraph" => ""
+                "homepage-below-title" => "",
+                "post-below-title" => "",
+                "post-below-content" => "",
+                "post-below-comments" => "",
+                "page-below-title" => "",
+                "page-below-content" => "",
+                "page-below-comments" => "",
+                "all-below-footer" => "",
+                "middle-of-post" => "",
+                "before-last-post-paragraph" => "",
+                "before-last-page-paragraph" => "",
+                "after-first-post-paragraph" => "",
+                "after-first-page-paragraph" => "",
+                "between-posts" => ""
             );
 
             $options = array(
@@ -188,7 +189,8 @@ if (!class_exists('WPAI_Settings')) {
                 "suppress-ipaddress" => "",
                 "min-char-count" => 0,
                 "min-word-count" => 0,
-                "min-paragraph-count" => 0
+                "min-paragraph-count" => 0,
+                "between-posts-every" => 0
             );
 
             return array(
@@ -337,6 +339,7 @@ if (!class_exists('WPAI_Settings')) {
             $this->add_settings_field_placements('wpai_page-below-content', 'Pages below content');
             $this->add_settings_field_placements('wpai_page-below-comments', 'Pages below comments');
             $this->add_settings_field_placements('wpai_all-below-footer', 'Below footer');
+            $this->add_settings_field_placements('wpai_between-posts', 'Between posts');
 
             /*
              * Options Section
@@ -370,6 +373,7 @@ if (!class_exists('WPAI_Settings')) {
             $this->add_settings_field_options('wpai_min-char-count', 'Min. character count for inline ads');
             $this->add_settings_field_options('wpai_min-word-count', 'Min. word count for inline ads');
             $this->add_settings_field_options('wpai_min-paragraph-count', 'Min. paragraph count for inline ads');
+            $this->add_settings_field_options('wpai_between-posts-every', 'After every N posts');
 
             // The settings container
             register_setting('wpai_settings', 'wpai_settings', array($this, 'validate_settings'));
@@ -477,6 +481,7 @@ if (!class_exists('WPAI_Settings')) {
             $this->setting_empty_string_if_not_set($new_settings, 'placements', 'before-last-page-paragraph');
             $this->setting_empty_string_if_not_set($new_settings, 'placements', 'after-first-post-paragraph');
             $this->setting_empty_string_if_not_set($new_settings, 'placements', 'after-first-page-paragraph');
+            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'between-posts');
 
             /*
              * Options Settings
@@ -511,6 +516,7 @@ if (!class_exists('WPAI_Settings')) {
             $this->setting_zero_if_not_set($new_settings, 'options', 'min-char-count');
             $this->setting_zero_if_not_set($new_settings, 'options', 'min-word-count');
             $this->setting_zero_if_not_set($new_settings, 'options', 'min-paragraph-count');
+            $this->setting_zero_if_not_set($new_settings, 'options', 'between-posts-every');
 
             return $new_settings;
         }

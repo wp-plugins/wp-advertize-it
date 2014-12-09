@@ -7,7 +7,13 @@ if (!class_exists('WordPress_Advertize_It')) {
      */
     class WordPress_Advertize_It extends WPAI_Module
     {
+        /**
+         * @var array
+         */
         protected static $readable_properties = array(); // These should really be constants, but PHP doesn't allow class constants to be arrays
+        /**
+         * @var array
+         */
         protected static $writeable_properties = array();
         protected $modules;
 
@@ -33,7 +39,6 @@ if (!class_exists('WordPress_Advertize_It')) {
                 'WPAI_Settings' => WPAI_Settings::get_instance()
             );
         }
-
 
         /*
          * Static methods
@@ -111,7 +116,6 @@ if (!class_exists('WordPress_Advertize_It')) {
                 }
             }
         }
-
 
         /*
          * Instance methods
@@ -204,6 +208,7 @@ if (!class_exists('WordPress_Advertize_It')) {
             add_filter('the_content', array($this, 'show_ad_in_content'));
             add_action('wp_footer', array($this, 'show_ad_below_footer'));
             add_action('comment_form', array($this, 'show_ad_below_comments'));
+            add_action('the_post', array($this, 'show_ad_between_posts'));
 
             add_shortcode('showad', array($this, 'handle_short_code'));
             add_action('wp_ajax_get_ad_list', array($this, 'get_ad_list'));
@@ -596,6 +601,33 @@ if (!class_exists('WordPress_Advertize_It')) {
                 return $page_below_title . $content . $page_below_content;
             } else {
                 return $content;
+            }
+        }
+
+        public function show_ad_between_posts($post)
+        {
+            global $wp_query;
+
+            error_log("post->id=".$post->ID);
+            error_log("wp_query->post->id=".$wp_query->post->ID);
+
+            if (((! is_home()) && (! is_archive())) || $wp_query->post != $post || 0 == $wp_query->current_post ) {
+                error_log("is_home or is_archive=".(((! is_home()) && (! is_archive())) ? "false" : "true"));
+                error_log("wp_query->post is post=".($wp_query->post != $post ? "false" : "true"));
+                error_log("wp_query->current_post=".$wp_query->current_post);
+                return;
+            }
+
+            $options = $this->modules['WPAI_Settings']->settings['options'];
+            $every = isset($options['between-posts-every']) ? intval($options['between-posts-every']) : 0;
+
+            error_log("every=".$every);
+            error_log("wp_query->current_post % every=".($wp_query->current_post % $every ));
+
+            if ($every > 0 && $wp_query->current_post % $every == 0) {
+                $blocks = $this->modules['WPAI_Settings']->settings['blocks'];
+                $between_posts_block = $this->modules['WPAI_Settings']->settings['placements']['between-posts'];
+                echo WPAI_Settings::get_ad_block($blocks, $between_posts_block);
             }
         }
 
