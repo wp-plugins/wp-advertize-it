@@ -17,7 +17,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         protected static $writeable_properties = array();
         protected $modules;
 
-        const VERSION = '0.7.5';
+        const VERSION = '0.8';
         const PREFIX = 'wpai_';
         const DEBUG_MODE = false;
 
@@ -620,11 +620,12 @@ if (!class_exists('WordPress_Advertize_It')) {
 
             $options = $this->modules['WPAI_Settings']->settings['options'];
             $every = isset($options['between-posts-every']) ? intval($options['between-posts-every']) : 0;
+            $max = isset($options['between-posts-every']) ? intval($options['between-posts-max']) : 0;
 
             error_log("every=".$every);
             error_log("wp_query->current_post % every=".($wp_query->current_post % $every ));
 
-            if ($every > 0 && $wp_query->current_post % $every == 0) {
+            if ($every > 0 && $wp_query->current_post % $every == 0 && $wp_query->current_post <= $every*$max) {
                 $blocks = $this->modules['WPAI_Settings']->settings['blocks'];
                 $between_posts_block = $this->modules['WPAI_Settings']->settings['placements']['between-posts'];
                 echo WPAI_Settings::get_ad_block($blocks, $between_posts_block);

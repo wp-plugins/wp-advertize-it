@@ -526,6 +526,11 @@ elseif ('wpai_between-posts-every' == $field['label_for']) : ?>
            id="wpai_settings[options][between-posts-every]"
            value="<?php echo isset($settings['options']['between-posts-every']) ? $settings['options']['between-posts-every'] : ''; ?>">
 <?php
+elseif ('wpai_between-posts-max' == $field['label_for']) : ?>
+    <input type="text" name="wpai_settings[options][between-posts-max]"
+           id="wpai_settings[options][between-posts-max]"
+           value="<?php echo isset($settings['options']['between-posts-max']) ? $settings['options']['between-posts-max'] : ''; ?>">
+<?php
 elseif ('wpai_suppress-url' == $field['label_for']) : ?>
     <input type="text" name="wpai_settings[options][suppress-url]"
            id="wpai_settings[options][suppress-url]"
