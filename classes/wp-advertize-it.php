@@ -17,7 +17,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         protected static $writeable_properties = array();
         protected $modules;
 
-        const VERSION = '0.8.1';
+        const VERSION = '0.8.2';
         const PREFIX = 'wpai_';
         const DEBUG_MODE = false;
 
@@ -619,7 +619,11 @@ if (!class_exists('WordPress_Advertize_It')) {
             if ($every > 0 && $wp_query->current_post % $every == 0 && $wp_query->current_post <= $every*$max) {
                 $blocks = $this->modules['WPAI_Settings']->settings['blocks'];
                 $between_posts_block = $this->modules['WPAI_Settings']->settings['placements']['between-posts'];
-                echo WPAI_Settings::get_ad_block($blocks, $between_posts_block);
+                error_log("blocks=".print_r($blocks, true));
+                error_log("between_posts_block=".print_r($between_posts_block, true));
+                if (isset($between_posts_block) && $between_posts_block != "") {
+                    echo WPAI_Settings::get_ad_block($blocks, $between_posts_block);
+                }
             }
         }
 
