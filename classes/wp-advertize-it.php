@@ -17,7 +17,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         protected static $writeable_properties = array();
         protected $modules;
 
-        const VERSION = '0.8.2';
+        const VERSION = '0.9';
         const PREFIX = 'wpai_';
         const DEBUG_MODE = false;
 
@@ -206,13 +206,45 @@ if (!class_exists('WordPress_Advertize_It')) {
             add_action('init', array($this, 'editor_buttons'));
 
             add_filter('the_content', array($this, 'show_ad_in_content'));
-            add_action('wp_footer', array($this, 'show_ad_below_footer'));
+	        add_action('wp_head', array($this, 'buffer_start'));
+	        add_action('wp_footer', array($this, 'buffer_end'));
+	        add_action('wp_footer', array($this, 'show_ad_below_footer'));
             add_action('comment_form', array($this, 'show_ad_below_comments'));
             add_action('the_post', array($this, 'show_ad_between_posts'));
 
             add_shortcode('showad', array($this, 'handle_short_code'));
             add_action('wp_ajax_get_ad_list', array($this, 'get_ad_list'));
         }
+
+	    function buffering_callback($buffer) {
+		    $above_everything = "";
+
+		    $content = get_the_content();
+		    $blocks = $this->RemoveSuppressBlocks( $this->modules['WPAI_Settings']->settings['blocks'], $content );
+		    $above_everything_block = $this->modules['WPAI_Settings']->settings['placements']['above-everything'];
+
+		    $options = $this->modules['WPAI_Settings']->settings['options'];
+
+		    if ($this->is_suppress_specific($options, $content)) {
+			    return $buffer;
+		    }
+
+		    if ($above_everything_block != "") {
+			    $above_everything = WPAI_Settings::get_ad_block($blocks, $above_everything_block);
+		    }
+
+		    $matches = preg_split('/(<body.*?>)/i', $buffer, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+		    $buffer = $matches[0] . $matches[1] . $above_everything . $matches[2];
+		    return $buffer;
+	    }
+
+	    function buffer_start() {
+		    ob_start(array($this, 'buffering_callback'));
+	    }
+
+	    function buffer_end() {
+		    ob_end_flush();
+	    }
 
         function editor_buttons()
         {
@@ -457,8 +489,15 @@ if (!class_exists('WordPress_Advertize_It')) {
             $word_count = $this->get_word_count($content);
             $paragraph_count = $this->get_paragraph_count($content);
 
-            $blocks = $this->modules['WPAI_Settings']->settings['blocks'];
-            $homepage_below_title_block = $this->modules['WPAI_Settings']->settings['placements']['homepage-below-title'];
+	        $options = $this->modules['WPAI_Settings']->settings['options'];
+
+	        if ($this->is_suppress_specific($options, $content)) {
+		        return $content;
+	        }
+
+	        $blocks = $this->RemoveSuppressBlocks( $this->modules['WPAI_Settings']->settings['blocks'], $content );
+
+	        $homepage_below_title_block = $this->modules['WPAI_Settings']->settings['placements']['homepage-below-title'];
             $post_below_title_block = $this->modules['WPAI_Settings']->settings['placements']['post-below-title'];
             $post_below_content_block = $this->modules['WPAI_Settings']->settings['placements']['post-below-content'];
             $page_below_title_block = $this->modules['WPAI_Settings']->settings['placements']['page-below-title'];
@@ -470,11 +509,6 @@ if (!class_exists('WordPress_Advertize_It')) {
             $after_first_post_paragraph_block = $this->modules['WPAI_Settings']->settings['placements']['after-first-post-paragraph'];
             $after_first_page_paragraph_block = $this->modules['WPAI_Settings']->settings['placements']['after-first-page-paragraph'];
 
-            $options = $this->modules['WPAI_Settings']->settings['options'];
-
-            if ($this->is_suppress_specific($options, $content)) {
-                return $content;
-            }
             if (!is_feed() && strpos($content, '<!--NoHomePageAds-->') !== false) {
                 $homepage_below_title_block = "";
             }
@@ -631,10 +665,9 @@ if (!class_exists('WordPress_Advertize_It')) {
         {
             $all_below_footer = "";
 
-            $blocks = $this->modules['WPAI_Settings']->settings['blocks'];
+	        $content = get_the_content();
+	        $blocks = $this->RemoveSuppressBlocks( $this->modules['WPAI_Settings']->settings['blocks'], $content );
             $all_below_footer_block = $this->modules['WPAI_Settings']->settings['placements']['all-below-footer'];
-
-            $content = get_the_content();
 
             $options = $this->modules['WPAI_Settings']->settings['options'];
 
@@ -654,11 +687,10 @@ if (!class_exists('WordPress_Advertize_It')) {
             $post_below_comments = "";
             $page_below_comments = "";
 
-            $blocks = $this->modules['WPAI_Settings']->settings['blocks'];
+	        $content = get_the_content();
+	        $blocks = $this->RemoveSuppressBlocks( $this->modules['WPAI_Settings']->settings['blocks'], $content );
             $post_below_comments_block = $this->modules['WPAI_Settings']->settings['placements']['post-below-comments'];
             $page_below_comments_block = $this->modules['WPAI_Settings']->settings['placements']['page-below-comments'];
-
-            $content = get_the_content();
 
             $options = $this->modules['WPAI_Settings']->settings['options'];
 
@@ -716,7 +748,23 @@ if (!class_exists('WordPress_Advertize_It')) {
             self::clear_caching_plugins();
         }
 
-        /**
+	    /**
+	     * @param $blocks
+	     * @param $content
+	     *
+	     * @return mixed
+	     */
+	    public function RemoveSuppressBlocks( $blocks, $content ) {
+		    foreach ( $blocks as $number => $code ) {
+			    if ( strpos( $content, '<!--NoAdBlock' . ( $number + 1 ) . '-->' ) !== false ) {
+				    $blocks[ $number ] = "";
+			    }
+		    }
+
+		    return $blocks;
+	    }
+
+	    /**
          * Checks that the object is in a correct state
          *
          * @mvc Model

@@ -322,6 +322,26 @@ elseif ('wpai_between-posts' == $field['label_for']) : ?>
         ?>
     </select>
 <?php
+elseif ('wpai_above-everything' == $field['label_for']) : ?>
+	<select class="placement-block-select" id="wpai_settings[placements][above-everything]"
+	        name="wpai_settings[placements][above-everything]">
+		<?php
+		foreach ($settings['blocks'] as $i => $block) :
+			$label = 'Ad Block ' . ($i + 1);
+			$selected = '';
+			if ($settings['placements']['above-everything'] == $i)
+				$selected = 'selected="selected"';
+			echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+		endforeach;
+		$i = "";
+		$label = 'None';
+		$selected = '';
+		if ($settings['placements']['above-everything'] == $i)
+			$selected = 'selected="selected"';
+		echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+		?>
+	</select>
+<?php
 elseif ('wpai_suppress-on-posts' == $field['label_for']) : ?>
     <input type="checkbox" name="wpai_settings[options][suppress-on-posts]"
            id="wpai_settings[options][suppress-on-posts]"

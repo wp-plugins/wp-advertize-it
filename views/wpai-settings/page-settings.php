@@ -44,6 +44,7 @@
             <li>&lt;!--NoBelowCommentsAds--&gt; : suppresses the ad below the comments</li>
             <li>&lt;!--NoWidgetAds--&gt; : suppresses the ad widget</li>
             <li>&lt;!--NoBelowFooterAds--&gt; : suppresses the footer</li>
+		    <li>&lt;!--NoAdBlockX--&gt; : suppresses ad block X on this post or page e.g. &lt;!--NoAdBlock1--&gt;</li>
         </ul>
         Just add it to your post in the text editor. These will be present on the page but not visible and will
         partially or totally disable ads when this post or page is viewed.

@@ -161,7 +161,8 @@ if (!class_exists('WPAI_Settings')) {
                 "before-last-page-paragraph" => "",
                 "after-first-post-paragraph" => "",
                 "after-first-page-paragraph" => "",
-                "between-posts" => ""
+                "between-posts" => "",
+	            "above-everything" => ""
             );
 
             $options = array(
@@ -341,6 +342,7 @@ if (!class_exists('WPAI_Settings')) {
             $this->add_settings_field_placements('wpai_page-below-comments', 'Pages below comments');
             $this->add_settings_field_placements('wpai_all-below-footer', 'Below footer');
             $this->add_settings_field_placements('wpai_between-posts', 'Between posts');
+	        $this->add_settings_field_placements('wpai_above-everything', 'Above everything');
 
             /*
              * Options Section
@@ -483,7 +485,8 @@ if (!class_exists('WPAI_Settings')) {
             $this->setting_empty_string_if_not_set($new_settings, 'placements', 'before-last-page-paragraph');
             $this->setting_empty_string_if_not_set($new_settings, 'placements', 'after-first-post-paragraph');
             $this->setting_empty_string_if_not_set($new_settings, 'placements', 'after-first-page-paragraph');
-            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'between-posts');
+	        $this->setting_empty_string_if_not_set($new_settings, 'placements', 'between-posts');
+	        $this->setting_empty_string_if_not_set($new_settings, 'placements', 'above-everything');
 
             /*
              * Options Settings
