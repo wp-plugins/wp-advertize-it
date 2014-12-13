@@ -17,7 +17,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         protected static $writeable_properties = array();
         protected $modules;
 
-        const VERSION = '0.9';
+        const VERSION = '0.9.1';
         const PREFIX = 'wpai_';
         const DEBUG_MODE = false;
 
@@ -203,7 +203,8 @@ if (!class_exists('WordPress_Advertize_It')) {
 
             add_action('init', array($this, 'init'));
             add_action('init', array($this, 'upgrade'), 11);
-            add_action('init', array($this, 'editor_buttons'));
+
+            add_action('init', array($this, 'editor_buttons'), 999);
 
             add_filter('the_content', array($this, 'show_ad_in_content'));
 	        add_action('wp_head', array($this, 'buffer_start'));
@@ -248,7 +249,10 @@ if (!class_exists('WordPress_Advertize_It')) {
 
         function editor_buttons()
         {
-            if ((current_user_can('edit_posts') || current_user_can('edit_pages')) && get_user_option('rich_editing')) {
+            $options = $this->modules['WPAI_Settings']->settings['options'];
+            if ((!isset($options['hide-editor-button']) || $options['hide-editor-button'] != 1)
+                && (current_user_can('edit_posts') || current_user_can('edit_pages'))
+                && get_user_option('rich_editing')) {
                 add_filter('mce_external_plugins', array($this, 'add_buttons'));
                 add_filter('mce_buttons', array($this, 'register_buttons'));
             }
@@ -478,6 +482,9 @@ if (!class_exists('WordPress_Advertize_It')) {
 
         public function show_ad_in_content($content)
         {
+            global $homepage_below_title_count;
+            if (!isset($homepage_below_title_count)) $homepage_below_title_count = 0;
+
             $homepage_below_title = "";
             $post_below_title = "";
             $post_below_content = "";
@@ -630,7 +637,12 @@ if (!class_exists('WordPress_Advertize_It')) {
             if (is_single()) {
                 return $post_below_title . $content . $post_below_content;
             } else if (is_home()) {
-                return $homepage_below_title . $content;
+                if (empty($options['homepage-below-title-max']) || $homepage_below_title_count < $options['homepage-below-title-max']) {
+                    $homepage_below_title_count++;
+                    return $homepage_below_title . $content;
+                } else {
+                    return $content;
+                }
             } else if (is_page()) {
                 return $page_below_title . $content . $page_below_content;
             } else {
@@ -653,8 +665,6 @@ if (!class_exists('WordPress_Advertize_It')) {
             if ($every > 0 && $wp_query->current_post % $every == 0 && $wp_query->current_post <= $every*$max) {
                 $blocks = $this->modules['WPAI_Settings']->settings['blocks'];
                 $between_posts_block = $this->modules['WPAI_Settings']->settings['placements']['between-posts'];
-                error_log("blocks=".print_r($blocks, true));
-                error_log("between_posts_block=".print_r($between_posts_block, true));
                 if (isset($between_posts_block) && $between_posts_block != "") {
                     echo WPAI_Settings::get_ad_block($blocks, $between_posts_block);
                 }

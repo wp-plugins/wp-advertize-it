@@ -166,6 +166,7 @@ if (!class_exists('WPAI_Settings')) {
             );
 
             $options = array(
+                "hide-editor-button" => false,
                 "suppress-on-posts" => false,
                 "suppress-on-pages" => false,
                 "suppress-on-attachment" => false,
@@ -192,7 +193,8 @@ if (!class_exists('WPAI_Settings')) {
                 "min-word-count" => 0,
                 "min-paragraph-count" => 0,
                 "between-posts-every" => 0,
-                "between-posts-max" => 0
+                "between-posts-max" => 0,
+                "homepage-below-title-max" => 0
             );
 
             return array(
@@ -349,6 +351,7 @@ if (!class_exists('WPAI_Settings')) {
              */
             $this->add_settings_section('wpai_section-options', 'Options');
 
+            $this->add_settings_field_options('wpai_hide-editor-button', 'Hide button in visual editor');
             $this->add_settings_field_options('wpai_suppress-on-posts', 'Suppress ads on posts');
             $this->add_settings_field_options('wpai_suppress-on-pages', 'Suppress ads on pages');
             $this->add_settings_field_options('wpai_suppress-on-attachment', 'Suppress ads on attachment page');
@@ -378,6 +381,7 @@ if (!class_exists('WPAI_Settings')) {
             $this->add_settings_field_options('wpai_min-paragraph-count', 'Min. paragraph count for inline ads');
             $this->add_settings_field_options('wpai_between-posts-every', 'After every N posts');
             $this->add_settings_field_options('wpai_between-posts-max', 'No. of ads between posts');
+            $this->add_settings_field_options('wpai_homepage-below-title-max', 'No. of ads below titles on home page');
 
             // The settings container
             register_setting('wpai_settings', 'wpai_settings', array($this, 'validate_settings'));
@@ -496,6 +500,7 @@ if (!class_exists('WPAI_Settings')) {
                 $new_settings['options'] = array();
             }
 
+            $this->setting_zero_if_not_set($new_settings, 'options', 'hide-editor-button');
             $this->setting_zero_if_not_set($new_settings, 'options', 'suppress-on-posts');
             $this->setting_zero_if_not_set($new_settings, 'options', 'suppress-on-pages');
             $this->setting_zero_if_not_set($new_settings, 'options', 'suppress-on-attachment');
@@ -523,6 +528,7 @@ if (!class_exists('WPAI_Settings')) {
             $this->setting_zero_if_not_set($new_settings, 'options', 'min-paragraph-count');
             $this->setting_zero_if_not_set($new_settings, 'options', 'between-posts-every');
             $this->setting_zero_if_not_set($new_settings, 'options', 'between-posts-max');
+            $this->setting_zero_if_not_set($new_settings, 'options', 'homepage-below-title-max');
 
             return $new_settings;
         }

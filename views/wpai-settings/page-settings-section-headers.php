@@ -82,7 +82,7 @@
 <?php
 elseif ('wpai_section-options' == $section['id']) : ?>
 
-    <p>Set options influencing how the ads are dispalyed.</p>
+    <p>Set options influencing how the ads are displayed.</p>
     <input type="hidden" name="wpai_settings[options][suppress-on-posts]" value="0">
 
 <?php endif; ?>
