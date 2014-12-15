@@ -530,6 +530,8 @@ if (!class_exists('WPAI_Settings')) {
             $this->setting_zero_if_not_set($new_settings, 'options', 'between-posts-max');
             $this->setting_zero_if_not_set($new_settings, 'options', 'homepage-below-title-max');
 
+            WordPress_Advertize_It::clear_caching_plugins();
+
             return $new_settings;
         }
     } // end WPAI_Settings

@@ -10,6 +10,13 @@
             });
         });
 
+        function previewBlock(id) {
+            jQuery('#block-preview-dialog').empty().append(jQuery(jQuery('#'+id).val())).dialog({
+                width: '100%',
+                height: 'auto'
+            });
+        }
+
         function addBlock() {
             if (!jQuery('#before-blocks + table.form-table').length) {
                 jQuery('#before-blocks').after('<table class="form-table"><tbody></tbody></table>');
@@ -21,7 +28,7 @@
                     lastIndex = currentIndex;
                 }
             });
-            jQuery('#before-blocks + table.form-table tbody').append('<tr><th scope="row"><label for="wpai_block-' + (lastIndex + 1) + '">Ad Block ' + (lastIndex + 1) + '</label><div for="wpai_block-' + (lastIndex + 1) + '_div"></div></th><td><textarea style="width: 95%;" wrap="soft" rows="5" value="" class="regular-text" id="wpai_block-' + (lastIndex + 1) + '" name="wpai_settings[blocks][' + lastIndex + ']"></textarea><input type="checkbox" id="checkbox_wpai_settings[blocks][' + lastIndex + ']" data-ad-block="wpai_block-' + (lastIndex + 1) + '" class="delete-checkbox"></td></tr>');
+            jQuery('#before-blocks + table.form-table tbody').append('<tr><th scope="row"><label for="wpai_block-' + (lastIndex + 1) + '">Ad Block ' + (lastIndex + 1) + '</label></div></th><td><button onclick="previewBlock(\'wpai_block-' + (lastIndex + 1) + '\');return false;" class="button-secondary" id="preview-block-<wpai_block-' + (lastIndex + 1) + '">Preview</button><div id="wpai_block-' + (lastIndex + 1) + '_div"></div><textarea style="width: 95%;" wrap="soft" rows="5" value="" class="regular-text" id="wpai_block-' + (lastIndex + 1) + '" name="wpai_settings[blocks][' + lastIndex + ']"></textarea><input type="checkbox" id="checkbox_wpai_settings[blocks][' + lastIndex + ']" data-ad-block="wpai_block-' + (lastIndex + 1) + '" class="delete-checkbox"></td></tr>');
             jQuery('.delete-checkbox').each(function () {
                 jQuery(this).closest('tr').children('th').first().prepend(jQuery(this));
             });
@@ -29,8 +36,8 @@
                 jQuery(this).append('<option data-block-id="wpai_block-' + (lastIndex + 1) + '" value="' + lastIndex + '" style="padding-right: 10px;">Ad Block ' + (lastIndex + 1) + '</option>');
                 resortSelect(jQuery(this));
             });
-	        var textarea = jQuery("wpai_block-" + (lastIndex + 1)).hide();
 	        var editor = ace.edit("wpai_block-" + (lastIndex + 1)+"_div");
+            var textarea = jQuery("#wpai_block-" + (lastIndex + 1)).hide();
 	        editor.setTheme("ace/theme/chrome");
 	        editor.getSession().setUseWrapMode(true);
 	        editor.getSession().setUseWorker(false);
@@ -74,6 +81,7 @@
     <button id="remove-block" class="button-secondary" onclick="removeBlocks();return false;">Remove Selected
         Blocks
     </button>
+    <div id="block-preview-dialog"></div>
     <div style="display:none;" id="before-blocks"></div>
 <?php elseif ('wpai_section-placements' == $section['id']) : ?>
 

@@ -8,17 +8,29 @@ if (!class_exists('WordPress_Advertize_It')) {
     class WordPress_Advertize_It extends WPAI_Module
     {
         /**
-         * @var array
+         * @var array all readable properties
          */
         protected static $readable_properties = array(); // These should really be constants, but PHP doesn't allow class constants to be arrays
         /**
-         * @var array
+         * @var array all writable properties
          */
         protected static $writeable_properties = array();
+        /**
+         * @var array all plugin modules
+         */
         protected $modules;
 
-        const VERSION = '0.9.1';
+        /**
+         * Plugin version
+         */
+        const VERSION = '0.9.2';
+        /**
+         * Prefix used to identify things related to this plugin
+         */
         const PREFIX = 'wpai_';
+        /**
+         * Whether debug mode is switched on or not. Not used currently.
+         */
         const DEBUG_MODE = false;
 
 
@@ -90,6 +102,8 @@ if (!class_exists('WordPress_Advertize_It')) {
                 wp_enqueue_style(self::PREFIX . 'admin');
                 wp_enqueue_script(self::PREFIX . 'wp-advertize-it-admin');
                 wp_enqueue_script(self::PREFIX . 'ace');
+                wp_enqueue_script('jquery-ui-dialog');
+                wp_enqueue_style("wp-jquery-ui-dialog");
             } else {
                 wp_enqueue_script(self::PREFIX . 'wp-advertize-it');
             }
@@ -100,7 +114,7 @@ if (!class_exists('WordPress_Advertize_It')) {
          *
          * @mvc Model
          */
-        protected static function clear_caching_plugins()
+        public static function clear_caching_plugins()
         {
             // WP Super Cache
             if (function_exists('wp_cache_clear_cache')) {
@@ -114,6 +128,13 @@ if (!class_exists('WordPress_Advertize_It')) {
                 if (method_exists($w3_total_cache, 'flush_all')) {
                     $w3_total_cache->flush_all();
                 }
+            }
+
+            // WP Engine
+            if ( class_exists( 'WpeCommon' ) ) {
+                WpeCommon::purge_memcached();
+                WpeCommon::clear_maxcdn_cache();
+                WpeCommon::purge_varnish_cache();
             }
         }
 
@@ -217,7 +238,14 @@ if (!class_exists('WordPress_Advertize_It')) {
             add_action('wp_ajax_get_ad_list', array($this, 'get_ad_list'));
         }
 
-	    function buffering_callback($buffer) {
+        /**
+         * Callback called when the page buffering stops.
+         * It checks whether an ad block is configured to be displayed at the beginning of the page and adds it just after the body tag.
+         *
+         * @param $buffer page contents
+         * @return string page contents containing the additional ad block before the body tag (if configured)
+         */
+        function buffering_callback($buffer) {
 		    $above_everything = "";
 
 		    $content = get_the_content();
@@ -239,14 +267,23 @@ if (!class_exists('WordPress_Advertize_It')) {
 		    return $buffer;
 	    }
 
-	    function buffer_start() {
+        /**
+         * Starts buffering of the page contents and defines buffering_callback as call back when buffering ends.
+         */
+        function buffer_start() {
 		    ob_start(array($this, 'buffering_callback'));
 	    }
 
-	    function buffer_end() {
+        /**
+         * Ends buffering of the page contents.
+         */
+        function buffer_end() {
 		    ob_end_flush();
 	    }
 
+        /**
+         * Registers the button in the visual editor unless it is disabled in the settings or the user doesn't have the required rights.
+         */
         function editor_buttons()
         {
             $options = $this->modules['WPAI_Settings']->settings['options'];
@@ -258,18 +295,30 @@ if (!class_exists('WordPress_Advertize_It')) {
             }
         }
 
+        /**
+         * @param $plugin_array
+         * @return mixed
+         */
         function add_buttons($plugin_array)
         {
             $plugin_array['wpai'] = plugins_url('../javascript/shortcode.js', __file__);
             return $plugin_array;
         }
 
+        /**
+         * @param $buttons
+         * @return mixed
+         */
         function register_buttons($buttons)
         {
             array_push($buttons, 'showad');
             return $buttons;
         }
 
+        /**
+         * @param $attributes
+         * @return string
+         */
         function handle_short_code($attributes)
         {
             $ad_block = "";
@@ -285,6 +334,10 @@ if (!class_exists('WordPress_Advertize_It')) {
             return $ad_block;
         }
 
+        /**
+         * @param $block
+         * @return string
+         */
         function get_ad_block($block)
         {
             $ad_block = "";
@@ -295,6 +348,9 @@ if (!class_exists('WordPress_Advertize_It')) {
             return $ad_block;
         }
 
+        /**
+         * Displays the contents of a dialog allowing to choose and ad block to be displayed.
+         */
         function get_ad_list()
         {
             $blocks = $this->modules['WPAI_Settings']->settings['blocks'];
@@ -320,6 +376,12 @@ if (!class_exists('WordPress_Advertize_It')) {
             die;
         }
 
+        /**
+         * Reads the options and checks for which post ID no adds should be displayed.
+         *
+         * @param $options settings for this plugin
+         * @return array list of post IDs for which no adds should be displayed
+         */
         public function get_suppress_post_id($options)
         {
             $suppress_post_id = array();
@@ -337,6 +399,10 @@ if (!class_exists('WordPress_Advertize_It')) {
             return $suppress_post_id;
         }
 
+        /**
+         * @param $options settings for this plugin
+         * @return array
+         */
         public function get_suppress_url($options)
         {
             $suppress_url = array();
@@ -349,6 +415,10 @@ if (!class_exists('WordPress_Advertize_It')) {
             return $suppress_url;
         }
 
+        /**
+         * @param $options settings for this plugin
+         * @return array
+         */
         public function get_suppress_ipaddress($options)
         {
             $suppress_ipaddress = array();
@@ -361,6 +431,10 @@ if (!class_exists('WordPress_Advertize_It')) {
             return $suppress_ipaddress;
         }
 
+        /**
+         * @param $options settings for this plugin
+         * @return array
+         */
         public function get_suppress_referrer($options)
         {
             $suppress_referrer = array();
@@ -373,6 +447,12 @@ if (!class_exists('WordPress_Advertize_It')) {
             return $suppress_referrer;
         }
 
+        /**
+         * Converts any array to an array of ints by converting each element in the array to an int.
+         *
+         * @param $array_in array to be converted
+         * @return array converted array
+         */
         private function to_int_array($array_in)
         {
             $array_out = array();
@@ -385,36 +465,65 @@ if (!class_exists('WordPress_Advertize_It')) {
             return $array_out;
         }
 
+        /**
+         * @param $options settings for this plugin
+         * @return array
+         */
         public function get_suppress_category($options)
         {
             return isset($options['suppress-category']) ? $this->to_int_array($options['suppress-category']) : array();
         }
 
+        /**
+         * @param $options settings for this plugin
+         * @return array
+         */
         public function get_suppress_tag($options)
         {
             return isset($options['suppress-tag']) ? $this->to_int_array($options['suppress-tag']) : array();
         }
 
+        /**
+         * @param $options settings for this plugin
+         * @return array
+         */
         public function get_suppress_user($options)
         {
             return isset($options['suppress-user']) ? $this->to_int_array($options['suppress-user']) : array();
         }
 
+        /**
+         * @param $options settings for this plugin
+         * @return array
+         */
         public function get_suppress_format($options)
         {
             return isset($options['suppress-format']) ? $options['suppress-format'] : array();
         }
 
+        /**
+         * @param $options settings for this plugin
+         * @return array
+         */
         public function get_suppress_post_type($options)
         {
             return isset($options['suppress-post-type']) ? $options['suppress-post-type'] : array();
         }
 
+        /**
+         * @param $options settings for this plugin
+         * @return array
+         */
         public function get_suppress_language($options)
         {
             return isset($options['suppress-language']) ? $options['suppress-language'] : array();
         }
 
+        /**
+         * @param $needle
+         * @param $haystack
+         * @return bool
+         */
         public function in_array_substr($needle, $haystack)
         {
             foreach ($haystack as $hay_item) {
@@ -425,6 +534,11 @@ if (!class_exists('WordPress_Advertize_It')) {
             return false;
         }
 
+        /**
+         * @param $options settings for this plugin
+         * @param $content contents of the current post
+         * @return bool
+         */
         public function is_suppress_specific($options, $content)
         {
             $suppress_post_id = $this->get_suppress_post_id($options);
@@ -465,21 +579,45 @@ if (!class_exists('WordPress_Advertize_It')) {
             );
         }
 
+        /**
+         * Counts the number of HTML paragraphs in the provided content.
+         *
+         * @param $content contents of the current post
+         * @return int the number of HTML paragraphs in the provided content.
+         */
         public function get_paragraph_count($content)
         {
             return substr_count($content, '</p>');
         }
 
+        /**
+         * Counts the words in the provided content after stripping all HTML tags
+         *
+         * @param $content contents of the current post
+         * @return int the number of words in the provided content
+         */
         public function get_word_count($content)
         {
             return str_word_count(strip_tags($content));
         }
 
+        /**
+         * Counts the characters in the provided content after stripping all HTML tags
+         *
+         * @param $content contents of the current post
+         * @return int the number of characters in the provided content
+         */
         public function get_character_count($content)
         {
             return strlen(strip_tags($content));
         }
 
+        /**
+         * Adds the ad blocks to be displayed in the provided contents
+         *
+         * @param $content contents of the current post
+         * @return string the post contents with the additionally configured ad blocks
+         */
         public function show_ad_in_content($content)
         {
             global $homepage_below_title_count;
@@ -650,6 +788,11 @@ if (!class_exists('WordPress_Advertize_It')) {
             }
         }
 
+        /**
+         * Displays ad blocks at regular intervals between posts in a multi-post page
+         *
+         * @param $post the current post in a multi-post page
+         */
         public function show_ad_between_posts($post)
         {
             global $wp_query;
@@ -671,6 +814,10 @@ if (!class_exists('WordPress_Advertize_It')) {
             }
         }
 
+        /**
+         * Displays an ad block (if configured).
+         * This function is called after the footer has been rendered. The ad block is thus displayed below the footer.
+         */
         public function show_ad_below_footer()
         {
             $all_below_footer = "";
@@ -692,6 +839,10 @@ if (!class_exists('WordPress_Advertize_It')) {
             echo $all_below_footer;
         }
 
+        /**
+         * Displays an ad block (if configured).
+         * This function is called after the comment section has been rendered. The ad block is thus displayed below the comment section.
+         */
         public function show_ad_below_comments()
         {
             $post_below_comments = "";
@@ -759,10 +910,12 @@ if (!class_exists('WordPress_Advertize_It')) {
         }
 
 	    /**
-	     * @param $blocks
-	     * @param $content
+         * Removes the ad blocks which are disabled with the NoAdBlock comment in the post contents.
+         *
+	     * @param $blocks all configured ad blocks
+         * @param $content contents of the current post
 	     *
-	     * @return mixed
+	     * @return mixed the remaining ad blocks
 	     */
 	    public function RemoveSuppressBlocks( $blocks, $content ) {
 		    foreach ( $blocks as $number => $code ) {
