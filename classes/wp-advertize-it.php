@@ -23,7 +23,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         /**
          * Plugin version
          */
-        const VERSION = '0.9.2';
+        const VERSION = '0.9.3';
         /**
          * Prefix used to identify things related to this plugin
          */
