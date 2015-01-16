@@ -1,0 +1,32 @@
+.settings_page_wpai_settings table.form-table {
+    margin: 1em 0;
+}
+
+.settings_page_wpai_settings .form-table th {
+    width: 265px !important;
+    vertical-align: middle;
+}
+
+.settings_page_wpai_settings .form-table td, .settings_page_wpai_settings .form-table th {
+    padding-bottom: 0;
+    padding-top: 5px;
+}
+
+.settings_page_wpai_settings .underline {
+    text-decoration: underline
+}
+
+.settings_page_wpai_settings ul.disc-list {
+    list-style: disc inside none;
+}
+
+.settings_page_wpai_settings .ace_editor {
+    min-height: 150px;
+}
+.settings_page_wpai_settings textarea {
+    margin-top: 0;
+}
+
+.settings_page_wpai_settings #before-blocks + table.form-table > tbody > tr {
+    border-bottom: 1.7em solid transparent;
+}
