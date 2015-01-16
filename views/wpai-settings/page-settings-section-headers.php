@@ -28,7 +28,19 @@
                     lastIndex = currentIndex;
                 }
             });
-            jQuery('#before-blocks + table.form-table tbody').append('<tr><th scope="row"><label for="wpai_block-' + (lastIndex + 1) + '">Ad Block ' + (lastIndex + 1) + '</label></div></th><td><button onclick="previewBlock(\'wpai_block-' + (lastIndex + 1) + '\');return false;" class="button-secondary" id="preview-block-<wpai_block-' + (lastIndex + 1) + '">Preview</button><div id="wpai_block-' + (lastIndex + 1) + '_div"></div><textarea style="width: 95%;" wrap="soft" rows="5" value="" class="regular-text" id="wpai_block-' + (lastIndex + 1) + '" name="wpai_settings[blocks][' + lastIndex + ']"></textarea><input type="checkbox" id="checkbox_wpai_settings[blocks][' + lastIndex + ']" data-ad-block="wpai_block-' + (lastIndex + 1) + '" class="delete-checkbox"></td></tr>');
+            jQuery('#before-blocks + table.form-table tbody').append(
+                '<tr>'
+                    +'<th scope="row">'
+                        +'<label for="wpai_block-' + (lastIndex + 1) + '">Ad Block ' + (lastIndex + 1) + '</label>'
+                    +'</th>'
+                    +'<td>'
+                        +'<button onclick="previewBlock(\'wpai_block-' + (lastIndex + 1) + '\');return false;" class="button-secondary" id="preview-block-<wpai_block-' + (lastIndex + 1) + '">Preview</button>'
+                        +'<div id="wpai_block-' + (lastIndex + 1) + '_div"></div>'
+                        +'<textarea style="width: 95%;" wrap="soft" rows="5" value="" class="regular-text" id="wpai_block-' + (lastIndex + 1) + '" name="wpai_settings[blocks][' + lastIndex + '][text]"></textarea>'
+                        +'<input type="text" name="wpai_settings[blocks][' + lastIndex + '][name]" value="Ad Block ' + (lastIndex + 1) + '">'
+                        +'<input type="checkbox" id="checkbox_wpai_settings[blocks][' + lastIndex + ']" data-ad-block="wpai_block-' + (lastIndex + 1) + '" class="delete-checkbox">'
+                    +'</td>'
+                +'</tr>');
             jQuery('.delete-checkbox').each(function () {
                 jQuery(this).closest('tr').children('th').first().prepend(jQuery(this));
             });

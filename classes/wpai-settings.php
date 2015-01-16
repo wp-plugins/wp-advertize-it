@@ -108,12 +108,21 @@ if (!class_exists('WPAI_Settings')) {
          */
         public function upgrade($db_version = 0)
         {
-            /*
-            if( version_compare( $db_version, 'x.y.z', '<' ) )
+            error_log('db_version='.$db_version);
+            if( version_compare( $db_version, '0.9.4', '<' ) )
             {
-                // Do stuff
+                error_log("options=".print_r($this->settings, true));
+                if (isset($this->settings['blocks'])) {
+                    $blocks = $this->settings['blocks'];
+                    foreach ($blocks as $i => $block) {
+                        $block_name = 'Ad Block ' . ($i + 1);
+                        $this->settings['blocks'][$i]=array();
+                        $this->settings['blocks'][$i]['name']=$block_name;
+                        $this->settings['blocks'][$i]['text']=$block;
+                    }
+                }
+                error_log("options=".print_r($this->settings, true));
             }
-            */
         }
 
         /**
@@ -159,6 +168,8 @@ if (!class_exists('WPAI_Settings')) {
                 "middle-of-post" => "",
                 "before-last-post-paragraph" => "",
                 "before-last-page-paragraph" => "",
+                "before-last-post-sentence" => "",
+                "before-last-page-sentence" => "",
                 "after-first-post-paragraph" => "",
                 "after-first-page-paragraph" => "",
                 "between-posts" => "",
@@ -321,7 +332,7 @@ if (!class_exists('WPAI_Settings')) {
             $this->add_settings_section('wpai_section-blocks', 'Ad Blocks');
 
             foreach ($blocks as $i => $block) {
-                $this->add_settings_field_blocks('wpai_block-' . ($i + 1), 'Ad Block ' . ($i + 1));
+                $this->add_settings_field_blocks('wpai_block-' . ($i + 1), $block['name']);
             }
 
             /*
@@ -334,12 +345,14 @@ if (!class_exists('WPAI_Settings')) {
             $this->add_settings_field_placements('wpai_after-first-post-paragraph', 'After first post paragraph');
             $this->add_settings_field_placements('wpai_middle-of-post', 'Middle of post');
             $this->add_settings_field_placements('wpai_before-last-post-paragraph', 'Before last post paragraph');
+            $this->add_settings_field_placements('wpai_before-last-post-sentence', 'Before last post sentence');
             $this->add_settings_field_placements('wpai_post-below-content', 'Posts below content');
             $this->add_settings_field_placements('wpai_post-below-comments', 'Posts below comments');
             $this->add_settings_field_placements('wpai_page-below-title', 'Pages below title');
             $this->add_settings_field_placements('wpai_after-first-page-paragraph', 'After first page paragraph');
             $this->add_settings_field_placements('wpai_middle-of-page', 'Middle of page');
             $this->add_settings_field_placements('wpai_before-last-page-paragraph', 'Before last page paragraph');
+            $this->add_settings_field_placements('wpai_before-last-page-sentence', 'Before last page sentence');
             $this->add_settings_field_placements('wpai_page-below-content', 'Pages below content');
             $this->add_settings_field_placements('wpai_page-below-comments', 'Pages below comments');
             $this->add_settings_field_placements('wpai_all-below-footer', 'Below footer');
@@ -402,8 +415,8 @@ if (!class_exists('WPAI_Settings')) {
 
         public static function get_ad_block($blocks, $id)
         {
-            if (isset($blocks[intval($id)])) {
-                return $blocks[intval($id)];
+            if (isset($blocks[intval($id)]) && isset($blocks[intval($id)]['text'])) {
+                return $blocks[intval($id)]['text'];
             }
             return "";
         }
@@ -487,6 +500,8 @@ if (!class_exists('WPAI_Settings')) {
             $this->setting_empty_string_if_not_set($new_settings, 'placements', 'middle-of-page');
             $this->setting_empty_string_if_not_set($new_settings, 'placements', 'before-last-post-paragraph');
             $this->setting_empty_string_if_not_set($new_settings, 'placements', 'before-last-page-paragraph');
+            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'before-last-post-sentence');
+            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'before-last-page-sentence');
             $this->setting_empty_string_if_not_set($new_settings, 'placements', 'after-first-post-paragraph');
             $this->setting_empty_string_if_not_set($new_settings, 'placements', 'after-first-page-paragraph');
 	        $this->setting_empty_string_if_not_set($new_settings, 'placements', 'between-posts');

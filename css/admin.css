@@ -21,9 +21,12 @@
 }
 
 .settings_page_wpai_settings .ace_editor {
-    margin-bottom: 1.7em;
     min-height: 150px;
 }
 .settings_page_wpai_settings textarea {
     margin-top: 0;
+}
+
+.settings_page_wpai_settings #before-blocks + table.form-table > tbody > tr {
+    border-bottom: 1.7em solid transparent;
 }

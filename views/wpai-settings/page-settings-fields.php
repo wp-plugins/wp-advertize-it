@@ -9,8 +9,11 @@
     <button onclick="previewBlock('<?php esc_attr_e($field['label_for']); ?>');return false;" class="button-secondary" id="preview-block-<?php esc_attr_e($field['label_for']); ?>">Preview</button>
     <div id="<?php esc_attr_e($field['label_for']); ?>_div"></div>
     <textarea style="width: 95%;" wrap="soft" rows="5" id="<?php esc_attr_e($field['label_for']); ?>"
-              name="<?php esc_attr_e('wpai_settings[blocks][' . (intval(substr($field['label_for'], strlen('wpai_block-'))) - 1) . ']'); ?>"
-              class="regular-text"><?php esc_attr_e($settings['blocks'][intval(substr($field['label_for'], strlen('wpai_block-'))) - 1]); ?></textarea>
+              name="<?php esc_attr_e('wpai_settings[blocks][' . (intval(substr($field['label_for'], strlen('wpai_block-'))) - 1) . '][text]'); ?>"
+              class="regular-text"><?php esc_attr_e($settings['blocks'][intval(substr($field['label_for'], strlen('wpai_block-'))) - 1]['text']); ?></textarea>
+    <input type="text"
+           name="<?php esc_attr_e('wpai_settings[blocks][' . (intval(substr($field['label_for'], strlen('wpai_block-'))) - 1) . '][name]'); ?>"
+           value="<?php esc_attr_e($settings['blocks'][intval(substr($field['label_for'], strlen('wpai_block-'))) - 1]['name']); ?>">
     <input type="checkbox"
            id="checkbox_<?php esc_attr_e('wpai_settings[blocks][' . substr($field['label_for'], strlen('wpai_block-')) . ']'); ?>"
            data-ad-block="<?php esc_attr_e($field['label_for']); ?>" class="delete-checkbox"/>
@@ -28,7 +31,7 @@
             name="wpai_settings[placements][homepage-below-title]">
         <?php
         foreach ($settings['blocks'] as $i => $block) :
-            $label = 'Ad Block ' . ($i + 1);
+            $label = $block['name'];
             $selected = '';
             if (intval($settings['placements']['homepage-below-title']) === $i)
                 $selected = 'selected="selected"';
@@ -47,7 +50,7 @@
             name="wpai_settings[placements][post-below-title]">
         <?php
         foreach ($settings['blocks'] as $i => $block) :
-            $label = 'Ad Block ' . ($i + 1);
+            $label = $block['name'];
             $selected = '';
             if (intval($settings['placements']['post-below-title']) === $i)
                 $selected = 'selected="selected"';
@@ -67,7 +70,7 @@ elseif ('wpai_post-below-content' == $field['label_for']) : ?>
             name="wpai_settings[placements][post-below-content]">
         <?php
         foreach ($settings['blocks'] as $i => $block) :
-            $label = 'Ad Block ' . ($i + 1);
+            $label = $block['name'];
             $selected = '';
             if (intval($settings['placements']['post-below-content']) === $i)
                 $selected = 'selected="selected"';
@@ -87,7 +90,7 @@ elseif ('wpai_post-below-comments' == $field['label_for']) : ?>
             name="wpai_settings[placements][post-below-comments]">
         <?php
         foreach ($settings['blocks'] as $i => $block) :
-            $label = 'Ad Block ' . ($i + 1);
+            $label = $block['name'];
             $selected = '';
             if (intval($settings['placements']['post-below-comments']) === $i)
                 $selected = 'selected="selected"';
@@ -107,7 +110,7 @@ elseif ('wpai_page-below-title' == $field['label_for']) : ?>
             name="wpai_settings[placements][page-below-title]">
         <?php
         foreach ($settings['blocks'] as $i => $block) :
-            $label = 'Ad Block ' . ($i + 1);
+            $label = $block['name'];
             $selected = '';
             if (intval($settings['placements']['page-below-title']) === $i)
                 $selected = 'selected="selected"';
@@ -127,7 +130,7 @@ elseif ('wpai_page-below-content' == $field['label_for']) : ?>
             name="wpai_settings[placements][page-below-content]">
         <?php
         foreach ($settings['blocks'] as $i => $block) :
-            $label = 'Ad Block ' . ($i + 1);
+            $label = $block['name'];
             $selected = '';
             if (intval($settings['placements']['page-below-content']) === $i)
                 $selected = 'selected="selected"';
@@ -147,7 +150,7 @@ elseif ('wpai_page-below-comments' == $field['label_for']) : ?>
             name="wpai_settings[placements][page-below-comments]">
         <?php
         foreach ($settings['blocks'] as $i => $block) :
-            $label = 'Ad Block ' . ($i + 1);
+            $label = $block['name'];
             $selected = '';
             if (intval($settings['placements']['page-below-comments']) === $i)
                 $selected = 'selected="selected"';
@@ -167,7 +170,7 @@ elseif ('wpai_all-below-footer' == $field['label_for']) : ?>
             name="wpai_settings[placements][all-below-footer]">
         <?php
         foreach ($settings['blocks'] as $i => $block) :
-            $label = 'Ad Block ' . ($i + 1);
+            $label = $block['name'];
             $selected = '';
             if (intval($settings['placements']['all-below-footer']) === $i)
                 $selected = 'selected="selected"';
@@ -187,7 +190,7 @@ elseif ('wpai_middle-of-post' == $field['label_for']) : ?>
             name="wpai_settings[placements][middle-of-post]">
         <?php
         foreach ($settings['blocks'] as $i => $block) :
-            $label = 'Ad Block ' . ($i + 1);
+            $label = $block['name'];
             $selected = '';
             if (intval($settings['placements']['middle-of-post']) === $i)
                 $selected = 'selected="selected"';
@@ -207,7 +210,7 @@ elseif ('wpai_middle-of-page' == $field['label_for']) : ?>
             name="wpai_settings[placements][middle-of-page]">
         <?php
         foreach ($settings['blocks'] as $i => $block) :
-            $label = 'Ad Block ' . ($i + 1);
+            $label = $block['name'];
             $selected = '';
             if (intval($settings['placements']['middle-of-page']) === $i)
                 $selected = 'selected="selected"';
@@ -227,7 +230,7 @@ elseif ('wpai_before-last-post-paragraph' == $field['label_for']) : ?>
             name="wpai_settings[placements][before-last-post-paragraph]">
         <?php
         foreach ($settings['blocks'] as $i => $block) :
-            $label = 'Ad Block ' . ($i + 1);
+            $label = $block['name'];
             $selected = '';
             if (intval($settings['placements']['before-last-post-paragraph']) === $i)
                 $selected = 'selected="selected"';
@@ -247,7 +250,7 @@ elseif ('wpai_before-last-page-paragraph' == $field['label_for']) : ?>
             name="wpai_settings[placements][before-last-page-paragraph]">
         <?php
         foreach ($settings['blocks'] as $i => $block) :
-            $label = 'Ad Block ' . ($i + 1);
+            $label = $block['name'];
             $selected = '';
             if (intval($settings['placements']['before-last-page-paragraph']) === $i)
                 $selected = 'selected="selected"';
@@ -262,12 +265,52 @@ elseif ('wpai_before-last-page-paragraph' == $field['label_for']) : ?>
         ?>
     </select>
 <?php
+elseif ('wpai_before-last-post-sentence' == $field['label_for']) : ?>
+    <select class="placement-block-select" id="wpai_settings[placements][before-last-post-sentence]"
+            name="wpai_settings[placements][before-last-post-sentence]">
+        <?php
+        foreach ($settings['blocks'] as $i => $block) :
+            $label = $block['name'];
+            $selected = '';
+            if (intval($settings['placements']['before-last-post-sentence']) === $i)
+                $selected = 'selected="selected"';
+            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        endforeach;
+        $i = "";
+        $label = 'None';
+        $selected = '';
+        if ($settings['placements']['before-last-post-sentence'] === $i)
+            $selected = 'selected="selected"';
+        echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        ?>
+    </select>
+<?php
+elseif ('wpai_before-last-page-sentence' == $field['label_for']) : ?>
+    <select class="placement-block-select" id="wpai_settings[placements][before-last-page-sentence]"
+            name="wpai_settings[placements][before-last-page-sentence]">
+        <?php
+        foreach ($settings['blocks'] as $i => $block) :
+            $label = $block['name'];
+            $selected = '';
+            if (intval($settings['placements']['before-last-page-sentence']) === $i)
+                $selected = 'selected="selected"';
+            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        endforeach;
+        $i = "";
+        $label = 'None';
+        $selected = '';
+        if ($settings['placements']['before-last-page-sentence'] === $i)
+            $selected = 'selected="selected"';
+        echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        ?>
+    </select>
+<?php
 elseif ('wpai_after-first-post-paragraph' == $field['label_for']) : ?>
     <select class="placement-block-select" id="wpai_settings[placements][after-first-post-paragraph]"
             name="wpai_settings[placements][after-first-post-paragraph]">
         <?php
         foreach ($settings['blocks'] as $i => $block) :
-            $label = 'Ad Block ' . ($i + 1);
+            $label = $block['name'];
             $selected = '';
             if (intval($settings['placements']['after-first-post-paragraph']) === $i)
                 $selected = 'selected="selected"';
@@ -287,7 +330,7 @@ elseif ('wpai_after-first-page-paragraph' == $field['label_for']) : ?>
             name="wpai_settings[placements][after-first-page-paragraph]">
         <?php
         foreach ($settings['blocks'] as $i => $block) :
-            $label = 'Ad Block ' . ($i + 1);
+            $label = $block['name'];
             $selected = '';
             if (intval($settings['placements']['after-first-page-paragraph']) === $i)
                 $selected = 'selected="selected"';
@@ -307,7 +350,7 @@ elseif ('wpai_between-posts' == $field['label_for']) : ?>
             name="wpai_settings[placements][between-posts]">
         <?php
         foreach ($settings['blocks'] as $i => $block) :
-            $label = 'Ad Block ' . ($i + 1);
+            $label = $block['name'];
             $selected = '';
             if (intval($settings['placements']['between-posts']) === $i)
                 $selected = 'selected="selected"';
@@ -327,7 +370,7 @@ elseif ('wpai_above-everything' == $field['label_for']) : ?>
 	        name="wpai_settings[placements][above-everything]">
 		<?php
 		foreach ($settings['blocks'] as $i => $block) :
-			$label = 'Ad Block ' . ($i + 1);
+            $label = $block['name'];
 			$selected = '';
 			if (intval($settings['placements']['above-everything']) === $i)
 				$selected = 'selected="selected"';

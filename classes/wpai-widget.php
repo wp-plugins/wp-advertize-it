@@ -67,7 +67,7 @@ class WPAI_Widget extends WP_Widget
                     name="<?php echo $this->get_field_name('block'); ?>">
                 <?php
                 foreach ($settings['blocks'] as $i => $block) :
-                    $label = 'Ad Block ' . ($i + 1);
+                    $label = $block['name'];
                     $selected = '';
                     if ($selected_block == $i)
                         $selected = 'selected="selected"';

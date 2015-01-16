@@ -23,7 +23,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         /**
          * Plugin version
          */
-        const VERSION = '0.9.3';
+        const VERSION = '0.9.4';
         /**
          * Prefix used to identify things related to this plugin
          */
@@ -342,8 +342,8 @@ if (!class_exists('WordPress_Advertize_It')) {
         {
             $ad_block = "";
             $blocks = $this->modules['WPAI_Settings']->settings['blocks'];
-            if (isset($blocks[intval($block) - 1])) {
-                $ad_block = $blocks[intval($block) - 1];
+            if (isset($blocks[intval($block) - 1]) && isset($blocks[intval($block) - 1]['text'])) {
+                $ad_block = $blocks[intval($block) - 1]['text'];
             }
             return $ad_block;
         }
@@ -366,7 +366,7 @@ if (!class_exists('WordPress_Advertize_It')) {
                         name="ad-block-select">
                     <?php foreach ($blocks as $i => $block) : ?>
                         <option style="padding-right: 10px;"
-                                value="<?php echo esc_attr(($i + 1)); ?>"><?php echo 'Ad Block ' . ($i + 1); ?></option>
+                                value="<?php echo esc_attr(($i + 1)); ?>"><?php echo $block['name']; ?></option>
                     <?php endforeach; ?>
                 </select>
             </p>
@@ -612,6 +612,14 @@ if (!class_exists('WordPress_Advertize_It')) {
             return strlen(strip_tags($content));
         }
 
+        public function endsWith($haystack, $needle) {
+            return $needle === "" || strpos($haystack, $needle, strlen($haystack) - strlen($needle)) !== FALSE;
+        }
+
+        public function endsWithDot($haystack) {
+            return $this->endsWith($haystack, ".");
+        }
+
         /**
          * Adds the ad blocks to be displayed in the provided contents
          *
@@ -653,6 +661,8 @@ if (!class_exists('WordPress_Advertize_It')) {
             $before_last_page_paragraph_block = $this->modules['WPAI_Settings']->settings['placements']['before-last-page-paragraph'];
             $after_first_post_paragraph_block = $this->modules['WPAI_Settings']->settings['placements']['after-first-post-paragraph'];
             $after_first_page_paragraph_block = $this->modules['WPAI_Settings']->settings['placements']['after-first-page-paragraph'];
+            $before_last_post_sentence_block = $this->modules['WPAI_Settings']->settings['placements']['before-last-post-sentence'];
+            $before_last_page_sentence_block = $this->modules['WPAI_Settings']->settings['placements']['before-last-page-sentence'];
 
             if (!is_feed() && strpos($content, '<!--NoHomePageAds-->') !== false) {
                 $homepage_below_title_block = "";
@@ -674,6 +684,10 @@ if (!class_exists('WordPress_Advertize_It')) {
             if (!is_feed() && strpos($content, '<!--NoBeforeLastParagraphAds-->') !== false) {
                 $before_last_post_paragraph_block = "";
                 $before_last_page_paragraph_block = "";
+            }
+            if (!is_feed() && strpos($content, '<!--NoBeforeLastSentenceAds-->') !== false) {
+                $before_last_post_sentence_block = "";
+                $before_last_page_sentence_block = "";
             }
             if (!is_feed() && strpos($content, '<!--NoAfterFirstParagraphAds-->') !== false) {
                 $after_first_post_paragraph_block = "";
@@ -746,6 +760,43 @@ if (!class_exists('WordPress_Advertize_It')) {
                     $index = strpos($content, '</p>', $index) + 4;
                 }
                 $content = substr_replace($content, $before_last_page_paragraph, $index, 0);
+            }
+            if (is_single()
+                && $before_last_post_sentence_block != ""
+                && intval($options['min-char-count']) <= $char_count
+                && intval($options['min-word-count']) <= $word_count
+                && intval($options['min-sentence-count']) <= $paragraph_count
+            ) {
+                $before_last_post_sentence = WPAI_Settings::get_ad_block($blocks, $before_last_post_sentence_block);
+
+                $last = strrpos($content, '.');
+                if ($last !== false) {
+                    if ($this->endsWithDot(rtrim(strip_tags( $content)))) {
+                        $index = strrpos($content, '.', $last - strlen($content) - 1) + 1;
+                    }
+                    else {
+                        $index = $last+1;
+                    }
+                    $content = substr_replace($content, $before_last_post_sentence, $index, 0);
+                }
+            } else if (is_page()
+                && $before_last_page_sentence_block != ""
+                && intval($options['min-char-count']) <= $char_count
+                && intval($options['min-word-count']) <= $word_count
+                && intval($options['min-sentence-count']) <= $paragraph_count
+            ) {
+                $before_last_page_sentence = WPAI_Settings::get_ad_block($blocks, $before_last_page_sentence_block);
+
+                $last = strrpos($content, '.');
+                if ($last !== false) {
+                    if ($this->endsWithDot(rtrim(strip_tags( $content)))) {
+                        $index = strrpos($content, '.', $last - strlen($content) - 1) + 1;
+                    }
+                    else {
+                        $index = $last+1;
+                    }
+                    $content = substr_replace($content, $before_last_page_sentence, $index, 0);
+                }
             }
             if (is_single()
                 && $after_first_post_paragraph_block != ""
@@ -920,7 +971,7 @@ if (!class_exists('WordPress_Advertize_It')) {
 	    public function RemoveSuppressBlocks( $blocks, $content ) {
 		    foreach ( $blocks as $number => $code ) {
 			    if ( strpos( $content, '<!--NoAdBlock' . ( $number + 1 ) . '-->' ) !== false ) {
-				    $blocks[ $number ] = "";
+				    $blocks[ $number ]['text'] = "";
 			    }
 		    }
 
