@@ -168,8 +168,6 @@ if (!class_exists('WPAI_Settings')) {
                 "middle-of-post" => "",
                 "before-last-post-paragraph" => "",
                 "before-last-page-paragraph" => "",
-                "before-last-post-sentence" => "",
-                "before-last-page-sentence" => "",
                 "after-first-post-paragraph" => "",
                 "after-first-page-paragraph" => "",
                 "between-posts" => "",
@@ -345,14 +343,12 @@ if (!class_exists('WPAI_Settings')) {
             $this->add_settings_field_placements('wpai_after-first-post-paragraph', 'After first post paragraph');
             $this->add_settings_field_placements('wpai_middle-of-post', 'Middle of post');
             $this->add_settings_field_placements('wpai_before-last-post-paragraph', 'Before last post paragraph');
-            $this->add_settings_field_placements('wpai_before-last-post-sentence', 'Before last post sentence');
             $this->add_settings_field_placements('wpai_post-below-content', 'Posts below content');
             $this->add_settings_field_placements('wpai_post-below-comments', 'Posts below comments');
             $this->add_settings_field_placements('wpai_page-below-title', 'Pages below title');
             $this->add_settings_field_placements('wpai_after-first-page-paragraph', 'After first page paragraph');
             $this->add_settings_field_placements('wpai_middle-of-page', 'Middle of page');
             $this->add_settings_field_placements('wpai_before-last-page-paragraph', 'Before last page paragraph');
-            $this->add_settings_field_placements('wpai_before-last-page-sentence', 'Before last page sentence');
             $this->add_settings_field_placements('wpai_page-below-content', 'Pages below content');
             $this->add_settings_field_placements('wpai_page-below-comments', 'Pages below comments');
             $this->add_settings_field_placements('wpai_all-below-footer', 'Below footer');
@@ -500,8 +496,6 @@ if (!class_exists('WPAI_Settings')) {
             $this->setting_empty_string_if_not_set($new_settings, 'placements', 'middle-of-page');
             $this->setting_empty_string_if_not_set($new_settings, 'placements', 'before-last-post-paragraph');
             $this->setting_empty_string_if_not_set($new_settings, 'placements', 'before-last-page-paragraph');
-            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'before-last-post-sentence');
-            $this->setting_empty_string_if_not_set($new_settings, 'placements', 'before-last-page-sentence');
             $this->setting_empty_string_if_not_set($new_settings, 'placements', 'after-first-post-paragraph');
             $this->setting_empty_string_if_not_set($new_settings, 'placements', 'after-first-page-paragraph');
 	        $this->setting_empty_string_if_not_set($new_settings, 'placements', 'between-posts');

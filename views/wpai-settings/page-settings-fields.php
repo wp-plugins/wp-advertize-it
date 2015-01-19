@@ -30,38 +30,44 @@
     <select class="placement-block-select" id="wpai_settings[placements][homepage-below-title]"
             name="wpai_settings[placements][homepage-below-title]">
         <?php
-        foreach ($settings['blocks'] as $i => $block) :
-            $label = $block['name'];
-            $selected = '';
-            if (intval($settings['placements']['homepage-below-title']) === $i)
-                $selected = 'selected="selected"';
-            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        endforeach;
         $i = "";
         $label = 'None';
         $selected = '';
-        if ($settings['placements']['homepage-below-title'] === $i)
+        if (!isset($settings['placements']['homepage-below-title'])
+            || $settings['placements']['homepage-below-title'] === $i)
             $selected = 'selected="selected"';
         echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        foreach ($settings['blocks'] as $i => $block) :
+            $label = $block['name'];
+            $selected = '';
+            if (isset($settings['placements']['homepage-below-title'])
+                && "" !== ($settings['placements']['homepage-below-title'])
+                && intval($settings['placements']['homepage-below-title']) === $i)
+                $selected = 'selected="selected"';
+            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        endforeach;
         ?>
     </select>
 <?php elseif ('wpai_post-below-title' == $field['label_for']) : ?>
     <select class="placement-block-select" id="wpai_settings[placements][post-below-title]"
             name="wpai_settings[placements][post-below-title]">
         <?php
-        foreach ($settings['blocks'] as $i => $block) :
-            $label = $block['name'];
-            $selected = '';
-            if (intval($settings['placements']['post-below-title']) === $i)
-                $selected = 'selected="selected"';
-            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        endforeach;
         $i = "";
         $label = 'None';
         $selected = '';
-        if ($settings['placements']['post-below-title'] === $i)
+        if (!isset($settings['placements']['post-below-title'])
+            || $settings['placements']['post-below-title'] === $i)
             $selected = 'selected="selected"';
         echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        foreach ($settings['blocks'] as $i => $block) :
+            $label = $block['name'];
+            $selected = '';
+            if (isset($settings['placements']['post-below-title'])
+                && "" !== ($settings['placements']['post-below-title'])
+                && intval($settings['placements']['post-below-title']) === $i)
+                $selected = 'selected="selected"';
+            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        endforeach;
         ?>
     </select>
 <?php
@@ -69,19 +75,22 @@ elseif ('wpai_post-below-content' == $field['label_for']) : ?>
     <select class="placement-block-select" id="wpai_settings[placements][post-below-content]"
             name="wpai_settings[placements][post-below-content]">
         <?php
-        foreach ($settings['blocks'] as $i => $block) :
-            $label = $block['name'];
-            $selected = '';
-            if (intval($settings['placements']['post-below-content']) === $i)
-                $selected = 'selected="selected"';
-            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        endforeach;
         $i = "";
         $label = 'None';
         $selected = '';
-        if ($settings['placements']['post-below-content'] === $i)
+        if (!isset($settings['placements']['post-below-content'])
+            || $settings['placements']['post-below-content'] === $i)
             $selected = 'selected="selected"';
         echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        foreach ($settings['blocks'] as $i => $block) :
+            $label = $block['name'];
+            $selected = '';
+            if (isset($settings['placements']['post-below-content'])
+                && "" !== ($settings['placements']['post-below-content'])
+                && intval($settings['placements']['post-below-content']) === $i)
+                $selected = 'selected="selected"';
+            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        endforeach;
         ?>
     </select>
 <?php
@@ -89,19 +98,22 @@ elseif ('wpai_post-below-comments' == $field['label_for']) : ?>
     <select class="placement-block-select" id="wpai_settings[placements][post-below-comments]"
             name="wpai_settings[placements][post-below-comments]">
         <?php
-        foreach ($settings['blocks'] as $i => $block) :
-            $label = $block['name'];
-            $selected = '';
-            if (intval($settings['placements']['post-below-comments']) === $i)
-                $selected = 'selected="selected"';
-            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        endforeach;
         $i = "";
         $label = 'None';
         $selected = '';
-        if ($settings['placements']['post-below-comments'] === $i)
+        if (!isset($settings['placements']['post-below-comments'])
+            || $settings['placements']['post-below-comments'] === $i)
             $selected = 'selected="selected"';
         echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        foreach ($settings['blocks'] as $i => $block) :
+            $label = $block['name'];
+            $selected = '';
+            if (isset($settings['placements']['post-below-comments'])
+                && "" !== ($settings['placements']['post-below-comments'])
+                && intval($settings['placements']['post-below-comments']) === $i)
+                $selected = 'selected="selected"';
+            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        endforeach;
         ?>
     </select>
 <?php
@@ -109,19 +121,22 @@ elseif ('wpai_page-below-title' == $field['label_for']) : ?>
     <select class="placement-block-select" id="wpai_settings[placements][page-below-title]"
             name="wpai_settings[placements][page-below-title]">
         <?php
-        foreach ($settings['blocks'] as $i => $block) :
-            $label = $block['name'];
-            $selected = '';
-            if (intval($settings['placements']['page-below-title']) === $i)
-                $selected = 'selected="selected"';
-            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        endforeach;
         $i = "";
         $label = 'None';
         $selected = '';
-        if ($settings['placements']['page-below-title'] === $i)
+        if (!isset($settings['placements']['page-below-title'])
+            || $settings['placements']['page-below-title'] === $i)
             $selected = 'selected="selected"';
         echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        foreach ($settings['blocks'] as $i => $block) :
+            $label = $block['name'];
+            $selected = '';
+            if (isset($settings['placements']['page-below-title'])
+                && "" !== ($settings['placements']['page-below-title'])
+                && intval($settings['placements']['page-below-title']) === $i)
+                $selected = 'selected="selected"';
+            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        endforeach;
         ?>
     </select>
 <?php
@@ -129,19 +144,22 @@ elseif ('wpai_page-below-content' == $field['label_for']) : ?>
     <select class="placement-block-select" id="wpai_settings[placements][page-below-content]"
             name="wpai_settings[placements][page-below-content]">
         <?php
-        foreach ($settings['blocks'] as $i => $block) :
-            $label = $block['name'];
-            $selected = '';
-            if (intval($settings['placements']['page-below-content']) === $i)
-                $selected = 'selected="selected"';
-            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        endforeach;
         $i = "";
         $label = 'None';
         $selected = '';
-        if ($settings['placements']['page-below-content'] === $i)
+        if (!isset($settings['placements']['page-below-content'])
+            || $settings['placements']['page-below-content'] === $i)
             $selected = 'selected="selected"';
         echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        foreach ($settings['blocks'] as $i => $block) :
+            $label = $block['name'];
+            $selected = '';
+            if (isset($settings['placements']['page-below-content'])
+                && "" !== ($settings['placements']['page-below-content'])
+                && intval($settings['placements']['page-below-content']) === $i)
+                $selected = 'selected="selected"';
+            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        endforeach;
         ?>
     </select>
 <?php
@@ -149,19 +167,22 @@ elseif ('wpai_page-below-comments' == $field['label_for']) : ?>
     <select class="placement-block-select" id="wpai_settings[placements][page-below-comments]"
             name="wpai_settings[placements][page-below-comments]">
         <?php
-        foreach ($settings['blocks'] as $i => $block) :
-            $label = $block['name'];
-            $selected = '';
-            if (intval($settings['placements']['page-below-comments']) === $i)
-                $selected = 'selected="selected"';
-            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        endforeach;
         $i = "";
         $label = 'None';
         $selected = '';
-        if ($settings['placements']['page-below-comments'] === $i)
+        if (!isset($settings['placements']['page-below-content'])
+            || $settings['placements']['page-below-comments'] === $i)
             $selected = 'selected="selected"';
         echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        foreach ($settings['blocks'] as $i => $block) :
+            $label = $block['name'];
+            $selected = '';
+            if (isset($settings['placements']['page-below-content'])
+                && "" !== ($settings['placements']['page-below-content'])
+                && intval($settings['placements']['page-below-comments']) === $i)
+                $selected = 'selected="selected"';
+            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        endforeach;
         ?>
     </select>
 <?php
@@ -169,19 +190,22 @@ elseif ('wpai_all-below-footer' == $field['label_for']) : ?>
     <select class="placement-block-select" id="wpai_settings[placements][all-below-footer]"
             name="wpai_settings[placements][all-below-footer]">
         <?php
-        foreach ($settings['blocks'] as $i => $block) :
-            $label = $block['name'];
-            $selected = '';
-            if (intval($settings['placements']['all-below-footer']) === $i)
-                $selected = 'selected="selected"';
-            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        endforeach;
         $i = "";
         $label = 'None';
         $selected = '';
-        if ($settings['placements']['all-below-footer'] === $i)
+        if (!isset($settings['placements']['all-below-footer'])
+            || $settings['placements']['all-below-footer'] === $i)
             $selected = 'selected="selected"';
         echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        foreach ($settings['blocks'] as $i => $block) :
+            $label = $block['name'];
+            $selected = '';
+            if (isset($settings['placements']['all-below-footer'])
+                && "" !== ($settings['placements']['all-below-footer'])
+                && intval($settings['placements']['all-below-footer']) === $i)
+                $selected = 'selected="selected"';
+            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        endforeach;
         ?>
     </select>
 <?php
@@ -189,19 +213,22 @@ elseif ('wpai_middle-of-post' == $field['label_for']) : ?>
     <select class="placement-block-select" id="wpai_settings[placements][middle-of-post]"
             name="wpai_settings[placements][middle-of-post]">
         <?php
-        foreach ($settings['blocks'] as $i => $block) :
-            $label = $block['name'];
-            $selected = '';
-            if (intval($settings['placements']['middle-of-post']) === $i)
-                $selected = 'selected="selected"';
-            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        endforeach;
         $i = "";
         $label = 'None';
         $selected = '';
-        if ($settings['placements']['middle-of-post'] === $i)
+        if (!isset($settings['placements']['middle-of-post'])
+            || $settings['placements']['middle-of-post'] === $i)
             $selected = 'selected="selected"';
         echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        foreach ($settings['blocks'] as $i => $block) :
+            $label = $block['name'];
+            $selected = '';
+            if (isset($settings['placements']['middle-of-post'])
+                && "" !== ($settings['placements']['middle-of-post'])
+                && intval($settings['placements']['middle-of-post']) === $i)
+                $selected = 'selected="selected"';
+            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        endforeach;
         ?>
     </select>
 <?php
@@ -209,19 +236,22 @@ elseif ('wpai_middle-of-page' == $field['label_for']) : ?>
     <select class="placement-block-select" id="wpai_settings[placements][middle-of-page]"
             name="wpai_settings[placements][middle-of-page]">
         <?php
-        foreach ($settings['blocks'] as $i => $block) :
-            $label = $block['name'];
-            $selected = '';
-            if (intval($settings['placements']['middle-of-page']) === $i)
-                $selected = 'selected="selected"';
-            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        endforeach;
         $i = "";
         $label = 'None';
         $selected = '';
-        if ($settings['placements']['middle-of-page'] === $i)
+        if (!isset($settings['placements']['middle-of-page'])
+            || $settings['placements']['middle-of-page'] === $i)
             $selected = 'selected="selected"';
         echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        foreach ($settings['blocks'] as $i => $block) :
+            $label = $block['name'];
+            $selected = '';
+            if (isset($settings['placements']['middle-of-page'])
+                && "" !== ($settings['placements']['middle-of-page'])
+                && intval($settings['placements']['middle-of-page']) === $i)
+                $selected = 'selected="selected"';
+            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        endforeach;
         ?>
     </select>
 <?php
@@ -229,19 +259,22 @@ elseif ('wpai_before-last-post-paragraph' == $field['label_for']) : ?>
     <select class="placement-block-select" id="wpai_settings[placements][before-last-post-paragraph]"
             name="wpai_settings[placements][before-last-post-paragraph]">
         <?php
-        foreach ($settings['blocks'] as $i => $block) :
-            $label = $block['name'];
-            $selected = '';
-            if (intval($settings['placements']['before-last-post-paragraph']) === $i)
-                $selected = 'selected="selected"';
-            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        endforeach;
         $i = "";
         $label = 'None';
         $selected = '';
-        if ($settings['placements']['before-last-post-paragraph'] === $i)
+        if (!isset($settings['placements']['before-last-post-paragraph']) ||
+            $settings['placements']['before-last-post-paragraph'] === $i)
             $selected = 'selected="selected"';
         echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        foreach ($settings['blocks'] as $i => $block) :
+            $label = $block['name'];
+            $selected = '';
+            if (isset($settings['placements']['before-last-post-paragraph'])
+                && "" !== ($settings['placements']['before-last-post-paragraph'])
+                && intval($settings['placements']['before-last-post-paragraph']) === $i)
+                $selected = 'selected="selected"';
+            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        endforeach;
         ?>
     </select>
 <?php
@@ -249,59 +282,22 @@ elseif ('wpai_before-last-page-paragraph' == $field['label_for']) : ?>
     <select class="placement-block-select" id="wpai_settings[placements][before-last-page-paragraph]"
             name="wpai_settings[placements][before-last-page-paragraph]">
         <?php
-        foreach ($settings['blocks'] as $i => $block) :
-            $label = $block['name'];
-            $selected = '';
-            if (intval($settings['placements']['before-last-page-paragraph']) === $i)
-                $selected = 'selected="selected"';
-            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        endforeach;
         $i = "";
         $label = 'None';
         $selected = '';
-        if ($settings['placements']['before-last-page-paragraph'] === $i)
+        if (!isset($settings['placements']['before-last-page-paragraph'])
+            || $settings['placements']['before-last-page-paragraph'] === $i)
             $selected = 'selected="selected"';
         echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        ?>
-    </select>
-<?php
-elseif ('wpai_before-last-post-sentence' == $field['label_for']) : ?>
-    <select class="placement-block-select" id="wpai_settings[placements][before-last-post-sentence]"
-            name="wpai_settings[placements][before-last-post-sentence]">
-        <?php
         foreach ($settings['blocks'] as $i => $block) :
             $label = $block['name'];
             $selected = '';
-            if (intval($settings['placements']['before-last-post-sentence']) === $i)
+            if (isset($settings['placements']['before-last-page-paragraph'])
+                && "" !== ($settings['placements']['before-last-page-paragraph'])
+                && intval($settings['placements']['before-last-page-paragraph']) === $i)
                 $selected = 'selected="selected"';
             echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
         endforeach;
-        $i = "";
-        $label = 'None';
-        $selected = '';
-        if ($settings['placements']['before-last-post-sentence'] === $i)
-            $selected = 'selected="selected"';
-        echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        ?>
-    </select>
-<?php
-elseif ('wpai_before-last-page-sentence' == $field['label_for']) : ?>
-    <select class="placement-block-select" id="wpai_settings[placements][before-last-page-sentence]"
-            name="wpai_settings[placements][before-last-page-sentence]">
-        <?php
-        foreach ($settings['blocks'] as $i => $block) :
-            $label = $block['name'];
-            $selected = '';
-            if (intval($settings['placements']['before-last-page-sentence']) === $i)
-                $selected = 'selected="selected"';
-            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        endforeach;
-        $i = "";
-        $label = 'None';
-        $selected = '';
-        if ($settings['placements']['before-last-page-sentence'] === $i)
-            $selected = 'selected="selected"';
-        echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
         ?>
     </select>
 <?php
@@ -309,19 +305,22 @@ elseif ('wpai_after-first-post-paragraph' == $field['label_for']) : ?>
     <select class="placement-block-select" id="wpai_settings[placements][after-first-post-paragraph]"
             name="wpai_settings[placements][after-first-post-paragraph]">
         <?php
-        foreach ($settings['blocks'] as $i => $block) :
-            $label = $block['name'];
-            $selected = '';
-            if (intval($settings['placements']['after-first-post-paragraph']) === $i)
-                $selected = 'selected="selected"';
-            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        endforeach;
         $i = "";
         $label = 'None';
         $selected = '';
-        if ($settings['placements']['after-first-post-paragraph'] === $i)
+        if (!isset($settings['placements']['after-first-post-paragraph'])
+            || $settings['placements']['after-first-post-paragraph'] === $i)
             $selected = 'selected="selected"';
         echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        foreach ($settings['blocks'] as $i => $block) :
+            $label = $block['name'];
+            $selected = '';
+            if (isset($settings['placements']['after-first-post-paragraph'])
+                && "" !== ($settings['placements']['after-first-post-paragraph'])
+                && intval($settings['placements']['after-first-post-paragraph']) === $i)
+                $selected = 'selected="selected"';
+            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        endforeach;
         ?>
     </select>
 <?php
@@ -329,19 +328,22 @@ elseif ('wpai_after-first-page-paragraph' == $field['label_for']) : ?>
     <select class="placement-block-select" id="wpai_settings[placements][after-first-page-paragraph]"
             name="wpai_settings[placements][after-first-page-paragraph]">
         <?php
-        foreach ($settings['blocks'] as $i => $block) :
-            $label = $block['name'];
-            $selected = '';
-            if (intval($settings['placements']['after-first-page-paragraph']) === $i)
-                $selected = 'selected="selected"';
-            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        endforeach;
         $i = "";
         $label = 'None';
         $selected = '';
-        if ($settings['placements']['after-first-page-paragraph'] === $i)
+        if (!isset($settings['placements']['after-first-page-paragraph'])
+            || $settings['placements']['after-first-page-paragraph'] === $i)
             $selected = 'selected="selected"';
         echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        foreach ($settings['blocks'] as $i => $block) :
+            $label = $block['name'];
+            $selected = '';
+            if (isset($settings['placements']['after-first-page-paragraph'])
+                && "" !== ($settings['placements']['after-first-page-paragraph'])
+                && intval($settings['placements']['after-first-page-paragraph']) === $i)
+                $selected = 'selected="selected"';
+            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        endforeach;
         ?>
     </select>
 <?php
@@ -349,19 +351,22 @@ elseif ('wpai_between-posts' == $field['label_for']) : ?>
     <select class="placement-block-select" id="wpai_settings[placements][between-posts]"
             name="wpai_settings[placements][between-posts]">
         <?php
-        foreach ($settings['blocks'] as $i => $block) :
-            $label = $block['name'];
-            $selected = '';
-            if (intval($settings['placements']['between-posts']) === $i)
-                $selected = 'selected="selected"';
-            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
-        endforeach;
         $i = "";
         $label = 'None';
         $selected = '';
-        if ($settings['placements']['between-posts'] === $i)
+        if (!isset($settings['placements']['between-posts'])
+            || $settings['placements']['between-posts'] === $i)
             $selected = 'selected="selected"';
         echo '<option style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        foreach ($settings['blocks'] as $i => $block) :
+            $label = $block['name'];
+            $selected = '';
+            if (isset($settings['placements']['between-posts'])
+                && "" !== ($settings['placements']['between-posts'])
+                && intval($settings['placements']['between-posts']) === $i)
+                $selected = 'selected="selected"';
+            echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
+        endforeach;
         ?>
     </select>
 <?php
@@ -369,19 +374,22 @@ elseif ('wpai_above-everything' == $field['label_for']) : ?>
 	<select class="placement-block-select" id="wpai_settings[placements][above-everything]"
 	        name="wpai_settings[placements][above-everything]">
 		<?php
+        $i = "";
+        $label = 'None';
+        $selected = '';
+        if (!isset($settings['placements']['above-everything'])
+            || $settings['placements']['above-everything'] === $i)
+            $selected = 'selected="selected"';
+        echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
 		foreach ($settings['blocks'] as $i => $block) :
             $label = $block['name'];
 			$selected = '';
-			if (intval($settings['placements']['above-everything']) === $i)
+			if (isset($settings['placements']['above-everything'])
+                && "" !== ($settings['placements']['above-everything'])
+                && intval($settings['placements']['above-everything']) === $i)
 				$selected = 'selected="selected"';
 			echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
 		endforeach;
-		$i = "";
-		$label = 'None';
-		$selected = '';
-		if (!isset($settings['placements']['above-everything']) || $settings['placements']['above-everything'] === $i)
-			$selected = 'selected="selected"';
-		echo '<option data-block-id="wpai_block-' . esc_attr($i + 1) . '" style="padding-right: 10px;" value="' . esc_attr($i) . '" ' . $selected . '>' . $label . '</option>';
 		?>
 	</select>
 <?php

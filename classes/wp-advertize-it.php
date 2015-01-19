@@ -23,7 +23,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         /**
          * Plugin version
          */
-        const VERSION = '0.9.4';
+        const VERSION = '0.9.5';
         /**
          * Prefix used to identify things related to this plugin
          */
@@ -131,7 +131,7 @@ if (!class_exists('WordPress_Advertize_It')) {
             }
 
             // WP Engine
-            if ( class_exists( 'WpeCommon' ) ) {
+            if (class_exists('WpeCommon')) {
                 WpeCommon::purge_memcached();
                 WpeCommon::clear_maxcdn_cache();
                 WpeCommon::purge_varnish_cache();
@@ -228,9 +228,9 @@ if (!class_exists('WordPress_Advertize_It')) {
             add_action('init', array($this, 'editor_buttons'), 999);
 
             add_filter('the_content', array($this, 'show_ad_in_content'));
-	        add_action('wp_head', array($this, 'buffer_start'));
-	        add_action('wp_footer', array($this, 'buffer_end'));
-	        add_action('wp_footer', array($this, 'show_ad_below_footer'));
+            add_action('wp_head', array($this, 'buffer_start'));
+            add_action('wp_footer', array($this, 'buffer_end'));
+            add_action('wp_footer', array($this, 'show_ad_below_footer'));
             add_action('comment_form', array($this, 'show_ad_below_comments'));
             add_action('the_post', array($this, 'show_ad_between_posts'));
 
@@ -245,41 +245,44 @@ if (!class_exists('WordPress_Advertize_It')) {
          * @param $buffer page contents
          * @return string page contents containing the additional ad block before the body tag (if configured)
          */
-        function buffering_callback($buffer) {
-		    $above_everything = "";
+        function buffering_callback($buffer)
+        {
+            $above_everything = "";
 
-		    $content = get_the_content();
-		    $blocks = $this->RemoveSuppressBlocks( $this->modules['WPAI_Settings']->settings['blocks'], $content );
-		    $above_everything_block = $this->modules['WPAI_Settings']->settings['placements']['above-everything'];
+            $content = get_the_content();
+            $blocks = $this->RemoveSuppressBlocks($this->modules['WPAI_Settings']->settings['blocks'], $content);
+            $above_everything_block = $this->modules['WPAI_Settings']->settings['placements']['above-everything'];
 
-		    $options = $this->modules['WPAI_Settings']->settings['options'];
+            $options = $this->modules['WPAI_Settings']->settings['options'];
 
-		    if ($this->is_suppress_specific($options, $content)) {
-			    return $buffer;
-		    }
+            if ($this->is_suppress_specific($options, $content)) {
+                return $buffer;
+            }
 
-		    if ($above_everything_block != "") {
-			    $above_everything = WPAI_Settings::get_ad_block($blocks, $above_everything_block);
-		    }
+            if ($above_everything_block != "") {
+                $above_everything = WPAI_Settings::get_ad_block($blocks, $above_everything_block);
+            }
 
-		    $matches = preg_split('/(<body.*?>)/i', $buffer, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-		    $buffer = $matches[0] . $matches[1] . $above_everything . $matches[2];
-		    return $buffer;
-	    }
+            $matches = preg_split('/(<body.*?>)/i', $buffer, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+            $buffer = $matches[0] . $matches[1] . $above_everything . $matches[2];
+            return $buffer;
+        }
 
         /**
          * Starts buffering of the page contents and defines buffering_callback as call back when buffering ends.
          */
-        function buffer_start() {
-		    ob_start(array($this, 'buffering_callback'));
-	    }
+        function buffer_start()
+        {
+            ob_start(array($this, 'buffering_callback'));
+        }
 
         /**
          * Ends buffering of the page contents.
          */
-        function buffer_end() {
-		    ob_end_flush();
-	    }
+        function buffer_end()
+        {
+            ob_end_flush();
+        }
 
         /**
          * Registers the button in the visual editor unless it is disabled in the settings or the user doesn't have the required rights.
@@ -289,7 +292,8 @@ if (!class_exists('WordPress_Advertize_It')) {
             $options = $this->modules['WPAI_Settings']->settings['options'];
             if ((!isset($options['hide-editor-button']) || $options['hide-editor-button'] != 1)
                 && (current_user_can('edit_posts') || current_user_can('edit_pages'))
-                && get_user_option('rich_editing')) {
+                && get_user_option('rich_editing')
+            ) {
                 add_filter('mce_external_plugins', array($this, 'add_buttons'));
                 add_filter('mce_buttons', array($this, 'register_buttons'));
             }
@@ -365,9 +369,9 @@ if (!class_exists('WordPress_Advertize_It')) {
                 <select class="widefat" id="ad-block-select"
                         name="ad-block-select">
                     <?php foreach ($blocks as $i => $block) : ?>
-                        <option style="padding-right: 10px;"
-                                value="<?php echo esc_attr(($i + 1)); ?>"><?php echo $block['name']; ?></option>
-                    <?php endforeach; ?>
+            <option style="padding-right: 10px;"
+                    value="<?php echo esc_attr(($i + 1)); ?>"><?php echo $block['name']; ?></option>
+        <?php endforeach; ?>
                 </select>
             </p>
             </body>
@@ -612,14 +616,6 @@ if (!class_exists('WordPress_Advertize_It')) {
             return strlen(strip_tags($content));
         }
 
-        public function endsWith($haystack, $needle) {
-            return $needle === "" || strpos($haystack, $needle, strlen($haystack) - strlen($needle)) !== FALSE;
-        }
-
-        public function endsWithDot($haystack) {
-            return $this->endsWith($haystack, ".");
-        }
-
         /**
          * Adds the ad blocks to be displayed in the provided contents
          *
@@ -642,15 +638,15 @@ if (!class_exists('WordPress_Advertize_It')) {
             $word_count = $this->get_word_count($content);
             $paragraph_count = $this->get_paragraph_count($content);
 
-	        $options = $this->modules['WPAI_Settings']->settings['options'];
+            $options = $this->modules['WPAI_Settings']->settings['options'];
 
-	        if ($this->is_suppress_specific($options, $content)) {
-		        return $content;
-	        }
+            if ($this->is_suppress_specific($options, $content)) {
+                return $content;
+            }
 
-	        $blocks = $this->RemoveSuppressBlocks( $this->modules['WPAI_Settings']->settings['blocks'], $content );
+            $blocks = $this->RemoveSuppressBlocks($this->modules['WPAI_Settings']->settings['blocks'], $content);
 
-	        $homepage_below_title_block = $this->modules['WPAI_Settings']->settings['placements']['homepage-below-title'];
+            $homepage_below_title_block = $this->modules['WPAI_Settings']->settings['placements']['homepage-below-title'];
             $post_below_title_block = $this->modules['WPAI_Settings']->settings['placements']['post-below-title'];
             $post_below_content_block = $this->modules['WPAI_Settings']->settings['placements']['post-below-content'];
             $page_below_title_block = $this->modules['WPAI_Settings']->settings['placements']['page-below-title'];
@@ -661,8 +657,6 @@ if (!class_exists('WordPress_Advertize_It')) {
             $before_last_page_paragraph_block = $this->modules['WPAI_Settings']->settings['placements']['before-last-page-paragraph'];
             $after_first_post_paragraph_block = $this->modules['WPAI_Settings']->settings['placements']['after-first-post-paragraph'];
             $after_first_page_paragraph_block = $this->modules['WPAI_Settings']->settings['placements']['after-first-page-paragraph'];
-            $before_last_post_sentence_block = $this->modules['WPAI_Settings']->settings['placements']['before-last-post-sentence'];
-            $before_last_page_sentence_block = $this->modules['WPAI_Settings']->settings['placements']['before-last-page-sentence'];
 
             if (!is_feed() && strpos($content, '<!--NoHomePageAds-->') !== false) {
                 $homepage_below_title_block = "";
@@ -684,10 +678,6 @@ if (!class_exists('WordPress_Advertize_It')) {
             if (!is_feed() && strpos($content, '<!--NoBeforeLastParagraphAds-->') !== false) {
                 $before_last_post_paragraph_block = "";
                 $before_last_page_paragraph_block = "";
-            }
-            if (!is_feed() && strpos($content, '<!--NoBeforeLastSentenceAds-->') !== false) {
-                $before_last_post_sentence_block = "";
-                $before_last_page_sentence_block = "";
             }
             if (!is_feed() && strpos($content, '<!--NoAfterFirstParagraphAds-->') !== false) {
                 $after_first_post_paragraph_block = "";
@@ -762,43 +752,6 @@ if (!class_exists('WordPress_Advertize_It')) {
                 $content = substr_replace($content, $before_last_page_paragraph, $index, 0);
             }
             if (is_single()
-                && $before_last_post_sentence_block != ""
-                && intval($options['min-char-count']) <= $char_count
-                && intval($options['min-word-count']) <= $word_count
-                && intval($options['min-sentence-count']) <= $paragraph_count
-            ) {
-                $before_last_post_sentence = WPAI_Settings::get_ad_block($blocks, $before_last_post_sentence_block);
-
-                $last = strrpos($content, '.');
-                if ($last !== false) {
-                    if ($this->endsWithDot(rtrim(strip_tags( $content)))) {
-                        $index = strrpos($content, '.', $last - strlen($content) - 1) + 1;
-                    }
-                    else {
-                        $index = $last+1;
-                    }
-                    $content = substr_replace($content, $before_last_post_sentence, $index, 0);
-                }
-            } else if (is_page()
-                && $before_last_page_sentence_block != ""
-                && intval($options['min-char-count']) <= $char_count
-                && intval($options['min-word-count']) <= $word_count
-                && intval($options['min-sentence-count']) <= $paragraph_count
-            ) {
-                $before_last_page_sentence = WPAI_Settings::get_ad_block($blocks, $before_last_page_sentence_block);
-
-                $last = strrpos($content, '.');
-                if ($last !== false) {
-                    if ($this->endsWithDot(rtrim(strip_tags( $content)))) {
-                        $index = strrpos($content, '.', $last - strlen($content) - 1) + 1;
-                    }
-                    else {
-                        $index = $last+1;
-                    }
-                    $content = substr_replace($content, $before_last_page_sentence, $index, 0);
-                }
-            }
-            if (is_single()
                 && $after_first_post_paragraph_block != ""
                 && intval($options['min-char-count']) <= $char_count
                 && intval($options['min-word-count']) <= $word_count
@@ -848,7 +801,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         {
             global $wp_query;
 
-            if (((! is_home()) && (! is_archive())) || $wp_query->post != $post || 0 == $wp_query->current_post ) {
+            if (((!is_home()) && (!is_archive())) || $wp_query->post != $post || 0 == $wp_query->current_post) {
                 return;
             }
 
@@ -856,7 +809,7 @@ if (!class_exists('WordPress_Advertize_It')) {
             $every = isset($options['between-posts-every']) ? intval($options['between-posts-every']) : 0;
             $max = isset($options['between-posts-every']) ? intval($options['between-posts-max']) : 0;
 
-            if ($every > 0 && $wp_query->current_post % $every == 0 && $wp_query->current_post <= $every*$max) {
+            if ($every > 0 && $wp_query->current_post % $every == 0 && $wp_query->current_post <= $every * $max) {
                 $blocks = $this->modules['WPAI_Settings']->settings['blocks'];
                 $between_posts_block = $this->modules['WPAI_Settings']->settings['placements']['between-posts'];
                 if (isset($between_posts_block) && $between_posts_block != "") {
@@ -873,8 +826,8 @@ if (!class_exists('WordPress_Advertize_It')) {
         {
             $all_below_footer = "";
 
-	        $content = get_the_content();
-	        $blocks = $this->RemoveSuppressBlocks( $this->modules['WPAI_Settings']->settings['blocks'], $content );
+            $content = get_the_content();
+            $blocks = $this->RemoveSuppressBlocks($this->modules['WPAI_Settings']->settings['blocks'], $content);
             $all_below_footer_block = $this->modules['WPAI_Settings']->settings['placements']['all-below-footer'];
 
             $options = $this->modules['WPAI_Settings']->settings['options'];
@@ -899,8 +852,8 @@ if (!class_exists('WordPress_Advertize_It')) {
             $post_below_comments = "";
             $page_below_comments = "";
 
-	        $content = get_the_content();
-	        $blocks = $this->RemoveSuppressBlocks( $this->modules['WPAI_Settings']->settings['blocks'], $content );
+            $content = get_the_content();
+            $blocks = $this->RemoveSuppressBlocks($this->modules['WPAI_Settings']->settings['blocks'], $content);
             $post_below_comments_block = $this->modules['WPAI_Settings']->settings['placements']['post-below-comments'];
             $page_below_comments_block = $this->modules['WPAI_Settings']->settings['placements']['page-below-comments'];
 
@@ -960,25 +913,26 @@ if (!class_exists('WordPress_Advertize_It')) {
             self::clear_caching_plugins();
         }
 
-	    /**
+        /**
          * Removes the ad blocks which are disabled with the NoAdBlock comment in the post contents.
          *
-	     * @param $blocks all configured ad blocks
+         * @param $blocks all configured ad blocks
          * @param $content contents of the current post
-	     *
-	     * @return mixed the remaining ad blocks
-	     */
-	    public function RemoveSuppressBlocks( $blocks, $content ) {
-		    foreach ( $blocks as $number => $code ) {
-			    if ( strpos( $content, '<!--NoAdBlock' . ( $number + 1 ) . '-->' ) !== false ) {
-				    $blocks[ $number ]['text'] = "";
-			    }
-		    }
+         *
+         * @return mixed the remaining ad blocks
+         */
+        public function RemoveSuppressBlocks($blocks, $content)
+        {
+            foreach ($blocks as $number => $code) {
+                if (strpos($content, '<!--NoAdBlock' . ($number + 1) . '-->') !== false) {
+                    $blocks[$number]['text'] = "";
+                }
+            }
 
-		    return $blocks;
-	    }
+            return $blocks;
+        }
 
-	    /**
+        /**
          * Checks that the object is in a correct state
          *
          * @mvc Model

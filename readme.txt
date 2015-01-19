@@ -4,7 +4,7 @@ Donate link: http://benohead.com/donate/
 Tags: ad, ad banner, ad block, ads, ads display, ads in widgets, ads on website, ads plugin, adsense, adsense plugin, advertisement, advertisements, advertiser, advertising, Goggle AdSense, google ads, google adsense, insert ads, insert ads automatically, insert Google ads, publisher, widget
 Requires at least: 3.0.1
 Tested up to: 4.1
-Stable tag: 0.9.4
+Stable tag: 0.9.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,19 +27,21 @@ The following locations are currently supported:
 * After first post paragraph	
 * Middle of post	
 * Before last post paragraph	
-* Before last post sentence	
+* Before last post sentence --> disabled because it created some stability problems.
 * Posts below content	
 * Posts below comments	
 * Pages below title	
 * After first page paragraph	
 * Middle of page	
 * Before last page paragraph	
-* Before last page sentence	
+* Before last page sentence --> disabled because it created some stability problems.
 * Pages below content	
 * Pages below comments	
 * Below footer	
 
 Note that sentences might not be identified correctly if there are dots within sentences e.g. "it is a country with 80.6 million inhabitants." - this would be identified as two sentences instead of one. Instead of this placement you may want to use the "before last post/page paragraph" placement and make sure the last sentence is on its own paragraph.
+
+Update: disabled last sentence placements because it created some stability problems.
 
 A widget is also available to display in a sidebar.
 
@@ -111,6 +113,11 @@ Send an email to henri.benoit@gmail.com
 5. Widget configuration
 
 == Changelog ==
+
+= 0.9.5 =
+
+* Disabled last sentence placements because it created some stability problems.
+* Fixed loading of unassigned placement in settings page.
 
 = 0.9.4 =
 
