@@ -108,20 +108,19 @@ if (!class_exists('WPAI_Settings')) {
          */
         public function upgrade($db_version = 0)
         {
-            error_log('db_version='.$db_version);
             if( version_compare( $db_version, '0.9.4', '<' ) )
             {
-                error_log("options=".print_r($this->settings, true));
                 if (isset($this->settings['blocks'])) {
                     $blocks = $this->settings['blocks'];
                     foreach ($blocks as $i => $block) {
-                        $block_name = 'Ad Block ' . ($i + 1);
-                        $this->settings['blocks'][$i]=array();
-                        $this->settings['blocks'][$i]['name']=$block_name;
-                        $this->settings['blocks'][$i]['text']=$block;
+                        if (!is_array($block)) {
+                            $block_name = 'Ad Block ' . ($i + 1);
+                            $this->settings['blocks'][$i]=array();
+                            $this->settings['blocks'][$i]['name']=$block_name;
+                            $this->settings['blocks'][$i]['text']=$block;
+                        }
                     }
                 }
-                error_log("options=".print_r($this->settings, true));
             }
         }
 
