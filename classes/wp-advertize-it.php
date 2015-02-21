@@ -640,11 +640,6 @@ if (!class_exists('WordPress_Advertize_It')) {
             $word_count = $this->get_word_count($content);
             $paragraph_count = $this->get_paragraph_count($cleaned_content);
 
-            error_log("paragraph_count=".$paragraph_count);
-            error_log("cleaned_content=".$cleaned_content);
-            error_log("cleaned_content length=".strlen($cleaned_content));
-            error_log("content length=".strlen($content));
-
             $options = $this->modules['WPAI_Settings']->settings['options'];
 
             if ($this->is_suppress_specific($options, $content)) {
@@ -718,7 +713,6 @@ if (!class_exists('WordPress_Advertize_It')) {
                 for ($i = 0; $i < $middle_paragraph; $i++) {
                     $index = strpos($cleaned_content, '</p>', $index) + 4;
                 }
-                error_log("middle_paragraph index=".$index);
                 $content = substr_replace($content, $middle_of_post, $index, 0);
                 $cleaned_content = $this->get_cleaned_content($content);
             } else if (is_page()
@@ -747,10 +741,8 @@ if (!class_exists('WordPress_Advertize_It')) {
                 for ($i = 0; $i < $paragraph_count - 1; $i++) {
                     $index = strpos($cleaned_content, '</p>', $index) + 4;
                 }
-                error_log("before_last_post_paragraph index=".$index);
                 $content = substr_replace($content, $before_last_post_paragraph, $index, 0);
                 $cleaned_content = $this->get_cleaned_content($content);
-                error_log("content=".$content);
             } else if (is_page()
                 && $before_last_page_paragraph_block != ""
                 && intval($options['min-char-count']) <= $char_count
@@ -776,7 +768,6 @@ if (!class_exists('WordPress_Advertize_It')) {
                 for ($i = 0; $i < 1; $i++) {
                     $index = strpos($cleaned_content, '</p>', $index) + 4;
                 }
-                error_log("after_first_post_paragraph index=".$index);
                 $content = substr_replace($content, $after_first_post_paragraph, $index, 0);
             } else if (is_page()
                 && $after_first_page_paragraph_block != ""
