@@ -3,8 +3,8 @@ Contributors: benohead, amazingweb-gmbh
 Donate link: http://benohead.com/donate/
 Tags: ad, ad banner, ad block, ads, ads display, ads in widgets, ads on website, ads plugin, adsense, adsense plugin, advertisement, advertisements, advertiser, advertising, Goggle AdSense, google ads, google adsense, insert ads, insert ads automatically, insert Google ads, publisher, widget
 Requires at least: 3.0.1
-Tested up to: 4.1
-Stable tag: 0.9.6
+Tested up to: 4.1.1
+Stable tag: 0.9.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -113,6 +113,10 @@ Send an email to henri.benoit@gmail.com
 5. Widget configuration
 
 == Changelog ==
+
+= 0.9.7 =
+
+* paragraphs in blockquote, pre or code tags are now ignored.
 
 = 0.9.6 =
 

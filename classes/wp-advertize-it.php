@@ -23,7 +23,7 @@ if (!class_exists('WordPress_Advertize_It')) {
         /**
          * Plugin version
          */
-        const VERSION = '0.9.6';
+        const VERSION = '0.9.7';
         /**
          * Prefix used to identify things related to this plugin
          */
@@ -634,9 +634,16 @@ if (!class_exists('WordPress_Advertize_It')) {
             $page_below_content = "";
 
             $content = str_replace('</P>', '</p>', $content);
+            $cleaned_content = $this->get_cleaned_content($content);
+
             $char_count = $this->get_character_count($content);
             $word_count = $this->get_word_count($content);
-            $paragraph_count = $this->get_paragraph_count($content);
+            $paragraph_count = $this->get_paragraph_count($cleaned_content);
+
+            error_log("paragraph_count=".$paragraph_count);
+            error_log("cleaned_content=".$cleaned_content);
+            error_log("cleaned_content length=".strlen($cleaned_content));
+            error_log("content length=".strlen($content));
 
             $options = $this->modules['WPAI_Settings']->settings['options'];
 
@@ -709,9 +716,11 @@ if (!class_exists('WordPress_Advertize_It')) {
                 $middle_paragraph = (int)($paragraph_count / 2);
                 $index = 0;
                 for ($i = 0; $i < $middle_paragraph; $i++) {
-                    $index = strpos($content, '</p>', $index) + 4;
+                    $index = strpos($cleaned_content, '</p>', $index) + 4;
                 }
+                error_log("middle_paragraph index=".$index);
                 $content = substr_replace($content, $middle_of_post, $index, 0);
+                $cleaned_content = $this->get_cleaned_content($content);
             } else if (is_page()
                 && $middle_of_page_block != ""
                 && intval($options['min-char-count']) <= $char_count
@@ -722,9 +731,10 @@ if (!class_exists('WordPress_Advertize_It')) {
                 $middle_paragraph = (int)($paragraph_count / 2);
                 $index = 0;
                 for ($i = 0; $i < $middle_paragraph; $i++) {
-                    $index = strpos($content, '</p>', $index) + 4;
+                    $index = strpos($cleaned_content, '</p>', $index) + 4;
                 }
                 $content = substr_replace($content, $middle_of_page, $index, 0);
+                $cleaned_content = $this->get_cleaned_content($content);
             }
             if (is_single()
                 && $before_last_post_paragraph_block != ""
@@ -735,9 +745,12 @@ if (!class_exists('WordPress_Advertize_It')) {
                 $before_last_post_paragraph = WPAI_Settings::get_ad_block($blocks, $before_last_post_paragraph_block);
                 $index = 0;
                 for ($i = 0; $i < $paragraph_count - 1; $i++) {
-                    $index = strpos($content, '</p>', $index) + 4;
+                    $index = strpos($cleaned_content, '</p>', $index) + 4;
                 }
+                error_log("before_last_post_paragraph index=".$index);
                 $content = substr_replace($content, $before_last_post_paragraph, $index, 0);
+                $cleaned_content = $this->get_cleaned_content($content);
+                error_log("content=".$content);
             } else if (is_page()
                 && $before_last_page_paragraph_block != ""
                 && intval($options['min-char-count']) <= $char_count
@@ -747,9 +760,10 @@ if (!class_exists('WordPress_Advertize_It')) {
                 $before_last_page_paragraph = WPAI_Settings::get_ad_block($blocks, $before_last_page_paragraph_block);
                 $index = 0;
                 for ($i = 0; $i < $paragraph_count - 1; $i++) {
-                    $index = strpos($content, '</p>', $index) + 4;
+                    $index = strpos($cleaned_content, '</p>', $index) + 4;
                 }
                 $content = substr_replace($content, $before_last_page_paragraph, $index, 0);
+                $cleaned_content = $this->get_cleaned_content($content);
             }
             if (is_single()
                 && $after_first_post_paragraph_block != ""
@@ -760,8 +774,9 @@ if (!class_exists('WordPress_Advertize_It')) {
                 $after_first_post_paragraph = WPAI_Settings::get_ad_block($blocks, $after_first_post_paragraph_block);
                 $index = 0;
                 for ($i = 0; $i < 1; $i++) {
-                    $index = strpos($content, '</p>', $index) + 4;
+                    $index = strpos($cleaned_content, '</p>', $index) + 4;
                 }
+                error_log("after_first_post_paragraph index=".$index);
                 $content = substr_replace($content, $after_first_post_paragraph, $index, 0);
             } else if (is_page()
                 && $after_first_page_paragraph_block != ""
@@ -774,7 +789,7 @@ if (!class_exists('WordPress_Advertize_It')) {
                 for ($i = 0; $i < 1; $i++) {
                     $index = strpos($content, '</p>', $index) + 4;
                 }
-                $content = substr_replace($content, $after_first_page_paragraph, $index, 0);
+                $content = substr_replace($cleaned_content, $after_first_page_paragraph, $index, 0);
             }
             if (is_single()) {
                 return $post_below_title . $content . $post_below_content;
@@ -943,6 +958,77 @@ if (!class_exists('WordPress_Advertize_It')) {
         protected function is_valid($property = 'all')
         {
             return true;
+        }
+
+        private function get_cleaned_content($content)
+        {
+            $new_content = $content;
+
+            $new_content = $this->censor_blockquote($new_content);
+            $new_content = $this->censor_pre($new_content);
+            $new_content = $this->censor_code($new_content);
+
+            return $new_content;
+        }
+
+        /**
+         * @param $content
+         * @return mixed|string
+         */
+        private function censor_blockquote($content)
+        {
+            $array = preg_split("/<blockquote>/", $content);
+            $new_content = array_shift($array);
+            foreach ($array as $string) {
+                $new_content .= "<blockquote>";
+                $array2 = preg_split(",</blockquote>,", $string);
+                $new_content .= preg_replace("/./", " ", array_shift($array2));
+                $new_content .= "</blockquote>";
+                if (!empty($array2)) {
+                    $new_content .= $array2[0];
+                }
+            }
+            return $new_content;
+        }
+
+        /**
+         * @param $content
+         * @return mixed|string
+         */
+        private function censor_pre($content)
+        {
+            $array = preg_split("/<pre>/", $content);
+            $new_content = array_shift($array);
+            foreach ($array as $string) {
+                $new_content .= "<pre>";
+                $array2 = preg_split(",</pre>,", $string);
+                $new_content .= preg_replace("/./", " ", array_shift($array2));
+                $new_content .= "</pre>";
+                if (!empty($array2)) {
+                    $new_content .= $array2[0];
+                }
+            }
+            return $new_content;
+        }
+
+        /**
+         * @param $content
+         * @return mixed|string
+         */
+        private function censor_code($content)
+        {
+            $array = preg_split("/<code>/", $content);
+            $new_content = array_shift($array);
+            foreach ($array as $string) {
+                $new_content .= "<code>";
+                $array2 = preg_split(",</code>,", $string);
+                $new_content .= preg_replace("/./", " ", array_shift($array2));
+                $new_content .= "</code>";
+                if (!empty($array2)) {
+                    $new_content .= $array2[0];
+                }
+            }
+            return $new_content;
         }
     }
     ; // end WordPress_Advertize_It
